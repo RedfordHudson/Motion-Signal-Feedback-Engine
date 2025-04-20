@@ -89,6 +89,15 @@ void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     juce::ignoreUnused (sampleRate, samplesPerBlock);
+
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.sampleRate = sampleRate;
+    spec.numChannels = getTotalNumOutputChannels();
+
+    osc.prepare (spec);
+
+    osc.setFrequency(220.0f);
 }
 
 void AudioPluginAudioProcessor::releaseResources()
@@ -151,6 +160,9 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::ignoreUnused (channelData);
         // ..do something to the data...
     }
+
+    juce::dsp::AudioBlock<float> audioBlock {buffer};
+    osc.process(juce::dsp::ProcessContextReplacing<float> (audioBlock));
 }
 
 //==============================================================================

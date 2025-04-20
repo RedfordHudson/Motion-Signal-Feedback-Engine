@@ -1,27 +1,42 @@
 //  C:\Users\Redford\Downloads\synth\juce_test\build\plugin\AudioPlugin_artefacts\Debug\Standalone\YourPluginName.exe
 
 {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "CMake Build",
-        "type": "shell",
-        "command": "cmake --build build", // or cmake-build-debug, etc.
-        "group": "build"
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Synth Only",
+      "type": "shell",
+      "command": "cmake --build build",
+      "group": {
+        "kind": "build",
+        "isDefault": true // ctrl+shift+b
       },
-      {
-        "label": "Run Synth",
-        "type": "shell",
-        "command": "taskkill /IM YourPluginName.exe /F; ${workspaceFolder}/build/plugin/AudioPlugin_artefacts/Debug/Standalone/YourPluginName.exe",
-        "problemMatcher": [],
-        "dependsOn": ["CMake Build"],
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        }
+      "problemMatcher": [],
+      "presentation": {
+        "close": true // close powershell after completion
       }
-    ]
-  }
-
-//   taskkill /IM YourPluginName_StandalonePlugin.exe /F && $
-  
+    },
+    {
+      "label": "Run Synth (Kill Old First)",
+      "type": "shell",
+      "command": "taskkill /IM YourPluginName.exe /F; ${workspaceFolder}/build/plugin/AudioPlugin_artefacts/Debug/Standalone/YourPluginName.exe",
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": false
+      },
+      "presentation": {
+        "close": true // close powershell after completion
+      }
+    },
+    {
+      "label": "Build and Run Synth",
+      "type": "shell",
+      "command": "cmake --build build ; taskkill /IM YourPluginName.exe /F; ${workspaceFolder}/build/plugin/AudioPlugin_artefacts/Debug/Standalone/YourPluginName.exe",
+      "problemMatcher": [],
+      "presentation": {
+        "close": true // close powershell after completion
+      }
+    }
+  ]
+}

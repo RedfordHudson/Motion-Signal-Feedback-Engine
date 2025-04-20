@@ -7,7 +7,7 @@ juce_add_plugin(${PROJECT_NAME}
     IS_SYNTH TRUE # disables audio input channels
     NEEDS_MIDI_INPUT FALSE
     NEEDS_MIDI_OUTPUT FALSE
-    PLUGIN_MANUFACTURER_CODE RFX
+    PLUGIN_MANUFACTURER_CODE JUCE
     PLUGIN_CODE AUPL
     FORMATS Standalone # hosts locally instead of via DAW
     PRODUCT_NAME "YourPluginName"
@@ -27,6 +27,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         juce::juce_audio_utils
+        juce::juce_dsp
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
@@ -40,6 +41,8 @@ target_compile_definitions(${PROJECT_NAME}
         JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_14)
+
 if (MSVC)
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
@@ -47,5 +50,3 @@ target_compile_definitions(${PROJECT_NAME}
         _CRT_SECURE_NO_WARNINGS
 )
 endif()
-
-# add_definitions(-D_CRT_SECURE_NO_WARNINGS)

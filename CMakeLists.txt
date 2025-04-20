@@ -3,9 +3,9 @@ project(AudioPluginStarter)
 
 set(CMAKE_CXX_STANDARD 23)
 
+set(LIB_DR ${CMAKE_CURRENT_SOURCE_DIR}/libs)
 # get CPM (only necessary for getting JUCE and other packages)
 #[[
-set(LIB_DR ${CMAKE_CURRENT_SOURCE_DIR}/libs)
 include(cmake/cpm.cmake)
 #]]
 
@@ -34,5 +34,6 @@ endif()
 
 # loop in plugin
 
-add_subdirectory(libs/juce)
+add_subdirectory(${LIB_DR}/juce)
+
 add_subdirectory(plugin)

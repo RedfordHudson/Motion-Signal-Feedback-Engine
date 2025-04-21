@@ -19,7 +19,7 @@
     {
       "label": "Run Synth (Kill Old First)",
       "type": "shell",
-      "command": "taskkill /IM YourPluginName.exe /F; ${workspaceFolder}/build/plugin/AudioPlugin_artefacts/Debug/Standalone/YourPluginName.exe",
+      "command": "taskkill /IM YourPluginName.exe /F; ${workspaceFolder}/build/plugin/AudioPlugin_artefacts/Debug/YourPluginName.exe",
       "problemMatcher": [],
       "group": {
         "kind": "test",
@@ -32,7 +32,7 @@
     {
       "label": "Build and Run Synth",
       "type": "shell",
-      "command": "cmake --build build ; taskkill /IM YourPluginName.exe /F; ${workspaceFolder}/build/plugin/AudioPlugin_artefacts/Debug/Standalone/YourPluginName.exe",
+      "command": "cmake --build build ; taskkill /IM YourPluginName.exe /F; ${workspaceFolder}/build/plugin/AudioPlugin_artefacts/Debug/YourPluginName.exe",
       "problemMatcher": [],
       "presentation": {
         "close": true // close powershell after completion

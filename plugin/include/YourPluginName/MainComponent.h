@@ -17,7 +17,7 @@ public:
     void resized() override;
 
 private:
-    SerialPortHandler serial();
+    SerialPortHandler serialPortHandler;
     void processData(const juce::String& data);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)

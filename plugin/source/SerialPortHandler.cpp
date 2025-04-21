@@ -1,109 +1,108 @@
 #include "YourPluginName/SerialPortHandler.h"
-#include <iostream>
-#include <sstream>
 
-SerialPortHandler::SerialPortHandler()
-    : hSerial(INVALID_HANDLE_VALUE), keepReading(false) {}
+SerialPortHandler::SerialPortHandler() : Thread("Serial Port Handler") {
+    // Constructor body if needed
+}
 
 SerialPortHandler::~SerialPortHandler() {
     stopReading();
     closePort();
 }
 
-bool SerialPortHandler::openPort(const std::string& portName) {
-    std::string fullPortName = "\\\\.\\" + portName;
-
-    hSerial = CreateFileA(
-        fullPortName.c_str(),
-        GENERIC_READ | GENERIC_WRITE,
-        0,
-        nullptr,
-        OPEN_EXISTING,
-        FILE_ATTRIBUTE_NORMAL,
-        nullptr
-    );
-
+bool SerialPortHandler::openSerialPort(const std::string& portName) {
+    hSerial = CreateFileA(portName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
+    
     if (hSerial == INVALID_HANDLE_VALUE) {
         std::cerr << "Failed to open serial port: " << portName << std::endl;
         return false;
     }
-
-    DCB dcbSerialParams = { 0 };
-    dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
-
+    
+    // Configure the serial port (baud rate, byte size, etc.)
+    DCB dcbSerialParams = {0};
     if (!GetCommState(hSerial, &dcbSerialParams)) {
-        std::cerr << "Failed to get current serial parameters.\n";
+        std::cerr << "Failed to get serial port state.\n";
+        closePort();
         return false;
     }
-
-    dcbSerialParams.BaudRate = CBR_115200;
-    dcbSerialParams.ByteSize = 8;
-    dcbSerialParams.StopBits = ONESTOPBIT;
-    dcbSerialParams.Parity = NOPARITY;
-
+    
+    dcbSerialParams.BaudRate = CBR_115200;  // Set baud rate
+    dcbSerialParams.ByteSize = 8;          // 8 data bits
+    dcbSerialParams.StopBits = ONESTOPBIT; // 1 stop bit
+    dcbSerialParams.Parity   = NOPARITY;   // No parity
     if (!SetCommState(hSerial, &dcbSerialParams)) {
-        std::cerr << "Failed to set serial parameters.\n";
+        std::cerr << "Failed to set serial port state.\n";
+        closePort();
         return false;
     }
 
-    std::cout << "Successfully opened serial port: " << portName << std::endl;
     return true;
 }
 
-void SerialPortHandler::closePort() {
+void SerialPortHandler::closeSerialPort() {
     if (hSerial != INVALID_HANDLE_VALUE) {
         CloseHandle(hSerial);
         hSerial = INVALID_HANDLE_VALUE;
-        std::cout << "Serial port closed.\n";
     }
+}
+
+void SerialPortHandler::openPort(const std::string& portName) {
+    if (!openSerialPort(portName)) {
+        std::cerr << "Unable to open port.\n";
+    } else {
+        std::cout << "Successfully opened serial port: " << portName << std::endl;
+    }
+}
+
+void SerialPortHandler::closePort() {
+    stopReading();  // Ensure the reading thread is stopped before closing the port
+    closeSerialPort();
 }
 
 void SerialPortHandler::startReading() {
-    std::cout << "starting read\n";
-    if (keepReading.load()) {
-        std::cout << "already reading, closing...\n";
-        return;
-    }
-    std::cout << "setting keepReading to true\n";
-    // keepReading = true;
-    keepReading.store(true); // Ensure atomic update
-
-    std::cout << "keepReading set to: " << keepReading.load() << std::endl;
-
-    readThread = std::thread(&SerialPortHandler::readLoop, this);
-
-
-    // Check if the thread is created properly
-    if (readThread.joinable()) {
-        std::cout << "Thread successfully created and joinable\n";
-    } else {
-        std::cerr << "Failed to create thread or thread is not joinable\n";
+    std::cout << "startReading\n";
+    if (!isThreadRunning()) {
+        startThread();  // Starts the read loop in a background thread
     }
 }
 
-void SerialPortHandler::readLoop() {
-    std::cout << "readloop started\n";
+void SerialPortHandler::stopReading() {
+    keepReading.store(false);
+    stopThread(2000);  // Stop the thread with a timeout (2 seconds)
+}
 
-    std::cout << "keepReading set to: " << keepReading.load() << std::endl;
-    keepReading.store(true);  // Ensure keepReading is true when we start the loop
-    std::cout << "keepReading set to: " << keepReading.load() << std::endl;
+void SerialPortHandler::run() {
+    std::cout << "running\n";
+
+    keepReading.store(true);
+    std::cout << "keepReading: "<<keepReading<<"\n";
 
     char buffer[256];
-    std::cout << "keepReading set to: " << keepReading.load() << std::endl;
     DWORD bytesRead;
     std::string accumulated;
 
-    std::cout << "keepReading set to: " << keepReading.load() << std::endl;
     while (keepReading.load()) {
-        std::cout << "keepReading in loop: " << keepReading.load() << std::endl;
+        std::cout << "entering read loop\n";
         if (ReadFile(hSerial, buffer, sizeof(buffer) - 1, &bytesRead, nullptr)) {
+            std::cout << "passed if statement\n";
+
+            
+            // for (size_t i = 0; i < bytesRead; ++i) {
+            //     std::cout << "Byte " << i << ": " << static_cast<int>(buffer[i]) << std::endl;
+            // }
+
             buffer[bytesRead] = '\0';
             accumulated += std::string(buffer, bytesRead);
+            std::cout << "accumulated: "<<accumulated<<"\n\n";
 
             size_t newlinePos;
             while ((newlinePos = accumulated.find('}')) != std::string::npos) {
+                std::cout << "entering NESTED read loop\n";
+
                 std::string completeMsg = accumulated.substr(0, newlinePos + 1);
+                std::cout << "--1";
                 accumulated.erase(0, newlinePos + 1);
+                std::cout << "--2";
+                std::cout << "accumulated: "<<accumulated<<"\n";
 
                 std::cout << "Received: " << completeMsg << std::endl;
             }
@@ -112,15 +111,6 @@ void SerialPortHandler::readLoop() {
             break;
         }
 
-        Sleep(10); // Small delay to avoid overloading CPU
-    }
-}
-
-
-void SerialPortHandler::stopReading() {
-    if (keepReading.load()) {
-        keepReading = false;
-        if (readThread.joinable())
-            readThread.join();
+        Sleep(10); // Small delay to avoid overloading the CPU
     }
 }

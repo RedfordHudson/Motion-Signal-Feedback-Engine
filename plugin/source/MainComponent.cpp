@@ -5,19 +5,20 @@ MainComponent::MainComponent()
 
     std::cout << "testing\n";
 
-        // Inside MainComponent:
-    SerialPortHandler serial;
-
     // In the appropriate function or constructor:
-    bool isOpen = serial.openPort("COM3"); // Example COM port, change as needed
-
-    serial.startReading();
+    serialPortHandler.openPort("COM3"); // Example COM port, change as needed
+    serialPortHandler.startReading();
     
 }
 
 MainComponent::~MainComponent()
 {
     // serialPortHandler.closePort();  // Close the serial port on destruction
+
+
+    // Stop reading and close the port on shutdown
+    serialPortHandler.stopReading();
+    serialPortHandler.closePort();
 }
 
 void MainComponent::timerCallback()

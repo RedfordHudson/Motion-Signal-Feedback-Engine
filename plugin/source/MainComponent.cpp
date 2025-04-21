@@ -11,8 +11,7 @@ MainComponent::MainComponent()
     // In the appropriate function or constructor:
     bool isOpen = serial.openPort("COM3"); // Example COM port, change as needed
 
-    
-    serial.readSerialData();
+    serial.startReading();
     
 }
 

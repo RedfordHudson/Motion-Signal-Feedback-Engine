@@ -2,6 +2,8 @@
 
 #include <windows.h>
 #include <string>
+#include <thread>
+#include <atomic>
 
 class SerialPortHandler
 {
@@ -11,9 +13,14 @@ public:
 
     bool openPort(const std::string& portName);
     void closePort();
-    void readSerialData();
+
+    void startReading();
+    void stopReading();
 
 private:
     HANDLE hSerial;
-    bool isPortOpen;
+    std::atomic<bool> keepReading;
+    std::thread readThread;
+
+    void readLoop();
 };

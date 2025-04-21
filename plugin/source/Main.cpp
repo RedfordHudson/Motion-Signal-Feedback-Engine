@@ -79,6 +79,7 @@ public:
             // ask the app to quit when this happens, but you can change this to do
             // whatever you need.
             getInstance()->systemRequestedQuit();
+            // juce::JUCEApplication::getInstance()->systemRequestedQuit();
         }
 
         /* Note: Be careful if you override any DocumentWindow methods - the base

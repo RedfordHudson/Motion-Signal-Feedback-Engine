@@ -35,5 +35,6 @@ endif()
 # loop in plugin
 
 add_subdirectory(${LIB_DR}/juce)
+add_subdirectory(${LIB_DR}/serial)
 
 add_subdirectory(plugin)

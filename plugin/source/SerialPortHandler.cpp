@@ -59,7 +59,6 @@ void SerialPortHandler::closePort() {
 }
 
 void SerialPortHandler::startReading() {
-    std::cout << "startReading\n";
     if (!isThreadRunning()) {
         startThread();  // Starts the read loop in a background thread
     }
@@ -70,41 +69,96 @@ void SerialPortHandler::stopReading() {
     stopThread(2000);  // Stop the thread with a timeout (2 seconds)
 }
 
+
+std::unordered_map<std::string, int> parseJsonToDict(const std::string& completedMsg) {
+    std::unordered_map<std::string, int> data;
+    
+    // Remove the curly braces from the string
+    std::string msg = completedMsg.substr(1, completedMsg.size() - 2);
+    
+    // Create a stringstream to read the data
+    std::stringstream ss(msg);
+    std::string keyValue;
+    
+    // Loop through the stringstream and extract key-value pairs
+    while (std::getline(ss, keyValue, ',')) {
+        // Trim leading and trailing spaces (if any)
+        keyValue.erase(0, keyValue.find_first_not_of(" \t"));
+        keyValue.erase(keyValue.find_last_not_of(" \t") + 1);
+        
+        // Find the colon separating key and value
+        size_t colonPos = keyValue.find(":");
+        
+        if (colonPos != std::string::npos) {
+            // Extract key and value as strings
+            std::string key = keyValue.substr(0, colonPos);
+            std::string valueStr = keyValue.substr(colonPos + 1);
+            
+            // Remove any extra spaces and quotation marks
+            key.erase(0, key.find_first_not_of("\" \t"));
+            key.erase(key.find_last_not_of("\" \t") + 1);
+            
+            valueStr.erase(0, valueStr.find_first_not_of(" \t"));
+            valueStr.erase(valueStr.find_last_not_of(" \t") + 1);
+            
+            // Convert the value string to an integer
+            int value = std::stoi(valueStr);
+            
+            // Insert the key-value pair into the unordered_map
+            data[key] = value;
+        }
+    }
+    
+    return data;
+}
+
+void stringifyMap(std::unordered_map<std::string, int>& result) {
+    for (const auto& pair : result) {
+        std::cout << pair.first << ": " << pair.second << std::endl;
+    }
+}
+
 void SerialPortHandler::run() {
-    std::cout << "running\n";
 
     keepReading.store(true);
-    std::cout << "keepReading: "<<keepReading<<"\n";
 
     char buffer[256];
     DWORD bytesRead;
     std::string accumulated;
 
     while (keepReading.load()) {
-        std::cout << "entering read loop\n";
         if (ReadFile(hSerial, buffer, sizeof(buffer) - 1, &bytesRead, nullptr)) {
-            std::cout << "passed if statement\n";
-
-            
-            // for (size_t i = 0; i < bytesRead; ++i) {
-            //     std::cout << "Byte " << i << ": " << static_cast<int>(buffer[i]) << std::endl;
-            // }
 
             buffer[bytesRead] = '\0';
             accumulated += std::string(buffer, bytesRead);
-            std::cout << "accumulated: "<<accumulated<<"\n\n";
 
             size_t newlinePos;
             while ((newlinePos = accumulated.find('}')) != std::string::npos) {
-                std::cout << "entering NESTED read loop\n";
 
                 std::string completeMsg = accumulated.substr(0, newlinePos + 1);
-                std::cout << "--1";
                 accumulated.erase(0, newlinePos + 1);
-                std::cout << "--2";
-                std::cout << "accumulated: "<<accumulated<<"\n";
 
-                std::cout << "Received: " << completeMsg << std::endl;
+                std::unordered_map<std::string, int> result = parseJsonToDict(completeMsg);
+
+                /*
+                dictionary structure {
+                    'ax':int,
+                    'ay':int,
+                    'az':int,
+                    'gx':int,
+                    'gy':int,
+                    'gz':int,
+                }
+                */
+
+                std::cout << result["gx"] << " ";
+                // std::cout << result["gy"] << " ";
+                // std::cout << result["gz"] << " ";
+                
+                std::cout << std::endl;
+                // std::cout << completeMsg << std::endl;
+                // stringifyMap(result);
+            
             }
         } else {
             std::cerr << "Failed to read from serial port.\n";

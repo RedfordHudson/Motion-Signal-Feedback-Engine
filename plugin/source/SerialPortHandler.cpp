@@ -150,9 +150,15 @@ void SerialPortHandler::run() {
                     'gz':int,
                 }
                 */
-
-                std::cout << result["gx"] << std::endl;
-            
+                
+                int gx_int = result["gx"];
+                float gx = static_cast<float>(gx_int);
+                std::cout << gx << std::endl;
+                // if (mainComponent != nullptr)
+                // {
+                //     mainComponent->setGx(gx);
+                // }
+                    
             }
         } else {
             std::cerr << "Failed to read from serial port.\n";

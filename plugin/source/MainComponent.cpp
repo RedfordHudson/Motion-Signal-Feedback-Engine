@@ -8,6 +8,9 @@ MainComponent::MainComponent()
 
     std::cout << "testing\n";
 
+    // cross-thread communication
+    // serialPortHandler.setMainComponent(this);
+
     // sensor
     serialPortHandler.openPort("COM3"); // Example COM port, change as needed
     serialPortHandler.startReading();

@@ -10,7 +10,8 @@
 #include <juce_audio_utils/juce_audio_utils.h>
 
 // sensor
-#include "YourPluginName/SerialPortHandler.h"
+// #include "YourPluginName/SerialPortHandler.h"
+class SerialPortHandler;
 
 // cross-thread communication
 #include <atomic>
@@ -52,7 +53,11 @@ private:
     std::atomic<float> gx = 0.0f;  // shared between threads
 
     // sensor
-    SerialPortHandler serialPortHandler;
+        // include -> class instantiation
+    // SerialPortHandler serialPortHandler;
+        // forward declaration -> pointer
+    std::unique_ptr<SerialPortHandler> serialPortHandler;
+
     void processData(const juce::String& data);
 
 

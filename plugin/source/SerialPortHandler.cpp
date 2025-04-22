@@ -1,5 +1,12 @@
 #include "YourPluginName/SerialPortHandler.h"
 
+// cross-thread communication
+// #include "YourPluginName/MainComponent.h"
+
+// callback
+#include <functional>
+
+
 SerialPortHandler::SerialPortHandler() : Thread("Serial Port Handler") {
     // Constructor body if needed
 }
@@ -118,6 +125,10 @@ void stringifyMap(std::unordered_map<std::string, int>& result) {
     }
 }
 
+void SerialPortHandler::setGxCallback(std::function<void(float)> callback) {
+    gxCallback = callback;
+}
+
 void SerialPortHandler::run() {
 
     keepReading.store(true);
@@ -153,12 +164,17 @@ void SerialPortHandler::run() {
                 
                 int gx_int = result["gx"];
                 float gx = static_cast<float>(gx_int);
-                std::cout << gx << std::endl;
+                // std::cout << gx << std::endl;
                 // if (mainComponent != nullptr)
                 // {
-                //     mainComponent->setGx(gx);
+                //     // mainComponent->setGx(gx);
                 // }
+                
+                if (gxCallback) {
+                    gxCallback(gx);  // Call the callback to set the gx value in MainComponent
+                }
                     
+
             }
         } else {
             std::cerr << "Failed to read from serial port.\n";

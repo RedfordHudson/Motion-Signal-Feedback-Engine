@@ -1,4 +1,5 @@
 #include "YourPluginName/MainComponent.h"
+#include "YourPluginName/SerialPortHandler.h"
 
 MainComponent::MainComponent()
     : AudioAppComponent()  // Call AudioAppComponent constructor
@@ -8,12 +9,20 @@ MainComponent::MainComponent()
 
     std::cout << "testing\n";
 
+    // forward declaration -> instantiate pointer
+    serialPortHandler = std::make_unique<SerialPortHandler>();
+
+    // Set the callback function for gx
+    serialPortHandler->setGxCallback([this](float gxValue) {
+        setGx(gxValue);  // Call setGx to update the gx value in MainComponent
+    });
+
     // cross-thread communication
     // serialPortHandler.setMainComponent(this);
 
     // sensor
-    serialPortHandler.openPort("COM3"); // Example COM port, change as needed
-    serialPortHandler.startReading();
+    serialPortHandler->openPort("COM3"); // Example COM port, change as needed
+    serialPortHandler->startReading();
     
 }
 
@@ -23,8 +32,8 @@ MainComponent::~MainComponent()
     // shutdownAudio(); # <- implicitly called by other library
 
     // sensor
-    serialPortHandler.stopReading();
-    serialPortHandler.closePort();
+    serialPortHandler->stopReading();
+    serialPortHandler->closePort();
 }
 
 // Component Class?
@@ -73,8 +82,9 @@ void MainComponent::prepareToPlay (int /*samplesPerBlockExpected*/, double sampl
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
     // map sensor parameter to oscillator frequency
-    // float gxValue = gx.load();
     float gxValue = gx.load();
+    std::cout << gxValue << "\n";
+
     float modulatedFrequency = 440.0f + gxValue * 100.0f;  // simple mapping
     phaseIncrement = juce::MathConstants<double>::twoPi * modulatedFrequency / currentSampleRate;
 

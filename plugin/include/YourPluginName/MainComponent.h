@@ -12,6 +12,9 @@
 // sensor
 #include "YourPluginName/SerialPortHandler.h"
 
+// cross-thread communication
+#include <atomic>
+
 class MainComponent  : public juce::Timer,
                     //    public juce::Component, # <- redundant
                        public juce::AudioAppComponent
@@ -34,6 +37,10 @@ public:
     // must override releaseResources() because it's declared as a pure virtual function in the base class
     void releaseResources() override;
 
+    // cross-thread communication
+    // inline member function; compiler "inlines" it for performance
+    void setGx(float newGx) { gx.store(newGx); }
+
 private:
 
     // oscillator
@@ -41,6 +48,8 @@ private:
     double phase = 0.0;
     double phaseIncrement = 0.0;
     float frequency = 440.0f; // A4
+
+    std::atomic<float> gx = 0.0f;  // shared between threads
 
     // sensor
     SerialPortHandler serialPortHandler;

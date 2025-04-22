@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <windows.h>
+// #include "YourPluginName/MainComponent.h"
 
 class SerialPortHandler : public juce::Thread
 {
@@ -16,6 +17,13 @@ public:
     void startReading();  // To start the serial reading thread
     void stopReading();   // To stop the reading loop
 
+    // cross-thread communication
+    // void setMainComponent(MainComponent* component)
+    // {
+    //     mainComponent = component;
+    // }
+
+
 private:
     void run() override;  // Override run to implement the read loop
 
@@ -24,4 +32,7 @@ private:
 
     HANDLE hSerial = INVALID_HANDLE_VALUE;
     std::atomic<bool> keepReading{false};
+
+    // cross-thread communication
+    // MainComponent* mainComponent = nullptr;
 };

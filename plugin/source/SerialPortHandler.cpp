@@ -151,13 +151,7 @@ void SerialPortHandler::run() {
                 }
                 */
 
-                std::cout << result["gx"] << " ";
-                // std::cout << result["gy"] << " ";
-                // std::cout << result["gz"] << " ";
-                
-                std::cout << std::endl;
-                // std::cout << completeMsg << std::endl;
-                // stringifyMap(result);
+                std::cout << result["gx"] << std::endl;
             
             }
         } else {

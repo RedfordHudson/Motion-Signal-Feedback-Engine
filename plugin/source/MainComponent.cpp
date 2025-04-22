@@ -69,6 +69,13 @@ void MainComponent::prepareToPlay (int /*samplesPerBlockExpected*/, double sampl
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
+    // map sensor parameter to oscillator frequency
+    // float gxValue = gx.load();
+    float gxValue = gx.load();
+    float modulatedFrequency = 440.0f + gxValue * 100.0f;  // simple mapping
+    phaseIncrement = juce::MathConstants<double>::twoPi * modulatedFrequency / currentSampleRate;
+
+
     auto* leftChannel  = bufferToFill.buffer->getWritePointer (0, bufferToFill.startSample);
     auto* rightChannel = bufferToFill.buffer->getNumChannels() > 1
                          ? bufferToFill.buffer->getWritePointer (1, bufferToFill.startSample)

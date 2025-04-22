@@ -9,7 +9,6 @@
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
 
-
 // sensor
 #include "YourPluginName/SerialPortHandler.h"
 
@@ -44,8 +43,8 @@ private:
     float frequency = 440.0f; // A4
 
     // sensor
-    // SerialPortHandler serialPortHandler;
-    // void processData(const juce::String& data);
+    SerialPortHandler serialPortHandler;
+    void processData(const juce::String& data);
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)

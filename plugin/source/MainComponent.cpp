@@ -9,19 +9,19 @@ MainComponent::MainComponent()
     std::cout << "testing\n";
 
     // sensor
-    // serialPortHandler.openPort("COM3"); // Example COM port, change as needed
-    // serialPortHandler.startReading();
+    serialPortHandler.openPort("COM3"); // Example COM port, change as needed
+    serialPortHandler.startReading();
     
 }
 
 MainComponent::~MainComponent()
 {
     // oscillator
-    // shutdownAudio();
+    // shutdownAudio(); # <- implicitly called by other library
 
     // sensor
-    // serialPortHandler.stopReading();
-    // serialPortHandler.closePort();
+    serialPortHandler.stopReading();
+    serialPortHandler.closePort();
 }
 
 // Component Class?
@@ -52,12 +52,10 @@ void MainComponent::resized()
 
 // serial ? =====================================
 
-/*
 void MainComponent::processData(const juce::String& data)
 {
     DBG("Received data: " + data);  // Output the data for debugging purposes
 }
-*/
 
 // oscillator ============================================
 

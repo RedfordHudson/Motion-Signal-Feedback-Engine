@@ -85,7 +85,18 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     float gxValue = gx.load();
     std::cout << gxValue << "\n";
 
-    float modulatedFrequency = 440.0f + gxValue * 100.0f;  // simple mapping
+    // Normalize gx to the desired frequency range (20 Hz to 2000 Hz)
+    float gx_min = -2000.0f;  // Example minimum value (adjust to your data)
+    float gx_max = 2000.0f;   // Example maximum value (adjust to your data)
+    float minFreq = 20.0f;     // Minimum frequency
+    float maxFreq = 800.0f;   // Maximum frequency
+
+    // Normalize gx to a value between 0 and 1
+    float normalizedGx = (gxValue - gx_min) / (gx_max - gx_min);
+    // Map it to the frequency range
+    float modulatedFrequency = (normalizedGx * (maxFreq - minFreq)) + minFreq;
+    
+    
     phaseIncrement = juce::MathConstants<double>::twoPi * modulatedFrequency / currentSampleRate;
 
 

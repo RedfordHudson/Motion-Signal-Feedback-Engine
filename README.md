@@ -33,3 +33,19 @@ A new battlefield is emerging, defined by increased computing, distributed opera
 - [Framework] **JUCE**: C++ framework designed for real-time audio DSP
 - [IDE] **VSCode**: Lightweight and extensible development environment
 - [Output Device] **Synthesizer**: Real-time sound generator
+
+## Objectives
+
+## FAQ
+
+- Why is the application in sound synthesis, rather than something more relevant to defense? 
+  → the synthesizer (output device) is internal to the PC, which makes the development cycle very fast and enables **rapid prototyping**
+  → concepts in sound synthesis (frequency modulation, filters, bandwidth, latency, spectral analysis, etc) are also used in DSP (digital signal processing), RF (radio frequency) and C5ISR, all of which form the basis of extremely impactful defense platforms, especially in the **electromagnetic/cyberwarfare domain**. Furthermore, the software we build can easily be transferred to other instruments based on sonic/electromagnetic/optical signal modulation 
+  → the application, although important, is the secondary focus. For this hackathon, the primary focus is **building the engine** or pipeline to support this data flow of sensor to output, which will provide the foundation for so many other, more advanced MIoT projects. Furthermore, this project feeds indirectly into a tremendous portfolio of embedded instruments to support national security
+- What are some examples of instruments that support national security that can use this framework?
+  → RF jamming/counter-drone
+  → wearable lasers
+  → gesture-based remote control of drones
+    → [ground drone](https://www.youtube.com/watch?v=MHl0FhyFmJc&list=LL&index=14)
+    → [prosthetic bionic hand](https://www.youtube.com/watch?v=Fvg-v8FPcjg&list=LL&index=12&t=662s)
+- What are some examples of sound-based instruments that support national security?

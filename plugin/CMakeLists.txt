@@ -21,8 +21,11 @@ juce_add_gui_app(${PROJECT_NAME}
     PRODUCT_NAME "YourPluginName"
     VERSION 1.0.0
     MODULES
+    # specify JUCE modules your application will need in the MODULES list 
+    # ensures modules are compiled into project and made available during build process
         juce_audio_basics
         juce_audio_devices
+        juce_audio_utils
         juce_audio_formats
         juce_gui_basics
         juce_gui_extra
@@ -44,10 +47,11 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        # juce::juce_audio_utils
-        # juce::juce_dsp
+    # explicitly links those modules into the final executable
+    # necessary b/c they have external dependencies
+        juce::juce_audio_utils
         juce::juce_gui_extra
-        SerialMonitor
+        # SerialMonitor
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags

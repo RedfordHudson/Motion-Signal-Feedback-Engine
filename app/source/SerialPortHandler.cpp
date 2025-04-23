@@ -164,11 +164,6 @@ void SerialPortHandler::run() {
                 
                 int gx_int = result["gx"];
                 float gx = static_cast<float>(gx_int);
-                // std::cout << gx << std::endl;
-                // if (mainComponent != nullptr)
-                // {
-                //     // mainComponent->setGx(gx);
-                // }
                 
                 if (gxCallback) {
                     gxCallback(gx);  // Call the callback to set the gx value in MainComponent

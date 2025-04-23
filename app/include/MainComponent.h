@@ -48,7 +48,7 @@ private:
     double currentSampleRate = 0.0;
     double phase = 0.0;
     double phaseIncrement = 0.0;
-    float frequency = 440.0f; // A4
+    float baseFrequency = 440.0f; // A4
 
     std::atomic<float> gx = 0.0f;  // shared between threads
 
@@ -57,9 +57,7 @@ private:
     // SerialPortHandler serialPortHandler;
         // forward declaration -> pointer
     std::unique_ptr<SerialPortHandler> serialPortHandler;
-
-    void processData(const juce::String& data);
-
+    bool readSensorData = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };

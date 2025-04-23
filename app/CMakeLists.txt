@@ -5,7 +5,7 @@ project(AudioPlugin VERSION 0.1.0)
 # analogue of add_executable?
 juce_add_gui_app(${PROJECT_NAME}
     TARGET_PREFIX ""  # Optional, removes prefix from target name
-    PRODUCT_NAME "Motion Synth"
+    PRODUCT_NAME "MotionSynth"
     VERSION 1.0.0
     MODULES
     # specify JUCE modules your application will need in the MODULES list 

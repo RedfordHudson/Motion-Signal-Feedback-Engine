@@ -37,4 +37,4 @@ endif()
 add_subdirectory(${LIB_DR}/juce)
 add_subdirectory(${LIB_DR}/serial)
 
-add_subdirectory(plugin)
+add_subdirectory(app)

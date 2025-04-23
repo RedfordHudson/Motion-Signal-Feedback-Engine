@@ -2,23 +2,10 @@ cmake_minimum_required(VERSION 4.0)
 
 project(AudioPlugin VERSION 0.1.0)
 
-#[[
-juce_add_plugin(${PROJECT_NAME}
-    COMPANY_NAME Redford
-    IS_SYNTH TRUE # disables audio input channels
-    NEEDS_MIDI_INPUT FALSE
-    NEEDS_MIDI_OUTPUT FALSE
-    PLUGIN_MANUFACTURER_CODE JUCE
-    PLUGIN_CODE AUPL
-    FORMATS Standalone # hosts locally instead of via DAW
-    PRODUCT_NAME "YourPluginName"
-)
-#]]
-
 # analogue of add_executable?
 juce_add_gui_app(${PROJECT_NAME}
     TARGET_PREFIX ""  # Optional, removes prefix from target name
-    PRODUCT_NAME "YourPluginName"
+    PRODUCT_NAME "Motion Synth"
     VERSION 1.0.0
     MODULES
     # specify JUCE modules your application will need in the MODULES list 

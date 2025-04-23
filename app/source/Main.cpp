@@ -1,4 +1,4 @@
-#include "YourPluginName/MainComponent.h"
+#include "MainComponent.h"
 
 //==============================================================================
 class GuiAppApplication final : public juce::JUCEApplication

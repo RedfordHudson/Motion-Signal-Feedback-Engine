@@ -1,4 +1,4 @@
-#include "YourPluginName/SerialPortHandler.h"
+#include "SerialPortHandler.h"
 
 // cross-thread communication
 // #include "YourPluginName/MainComponent.h"

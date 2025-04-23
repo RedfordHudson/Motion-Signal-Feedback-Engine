@@ -1,5 +1,5 @@
-#include "YourPluginName/MainComponent.h"
-#include "YourPluginName/SerialPortHandler.h"
+#include "MainComponent.h"
+#include "SerialPortHandler.h"
 
 MainComponent::MainComponent()
     : AudioAppComponent()  // Call AudioAppComponent constructor

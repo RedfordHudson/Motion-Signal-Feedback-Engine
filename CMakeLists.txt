@@ -1,40 +1,42 @@
-cmake_minimum_required(VERSION 4.0)
-project(AudioPluginStarter)
+cmake_minimum_required(VERSION 3.15)
+project(Synth-Engine VERSION 1.0.0)
 
-set(CMAKE_CXX_STANDARD 23)
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(LIB_DR ${CMAKE_CURRENT_SOURCE_DIR}/libs)
-# get CPM (only necessary for getting JUCE and other packages)
-#[[
-include(cmake/cpm.cmake)
-#]]
+# Initialize JUCE
+include(FetchContent)
+set(JUCE_DIR "${CMAKE_SOURCE_DIR}/libs/juce" CACHE PATH "Path to JUCE")
+add_subdirectory(${JUCE_DIR} JUCE_BUILD)
 
-# get JUCE
-#[[
-set(JUCE_VERSION 8.0.7)
-CPMAddPackage(
-    NAME JUCE
-    GITHUB_REPOSITORY juce-framework/JUCE
-    GIT_TAG ${JUCE_VERSION}
-    VERSIOn ${JUCE_VERSION}
-    SOURCE_DIR ${LIB_DR}/juce
+# Include JUCE settings
+include(cmake/JuceSettings.cmake)
+
+# Create the main application
+juce_add_gui_app(Synth-Engine
+    PRODUCT_NAME "Synth Engine"
+    COMPANY_NAME "YourCompany"
+    VERSION "1.0.0"
+    BUNDLE_ID "com.yourcompany.synthengine"
+    MICROPHONE_PERMISSION_ENABLED TRUE
 )
 
-# problem: takes SUPER long
-# solution: downloaded manually (git clone https://github.com/juce-framework/JUCE)
+# Add source files
+target_sources(Synth-Engine
+    PRIVATE
+        app/source/Main.cpp
+)
 
-#]]
+# Link against JUCE modules
+target_link_libraries(Synth-Engine
+    PRIVATE
+        juce::juce_core
+        juce::juce_audio_basics
+        juce::juce_audio_devices
+        juce::juce_audio_utils
+        juce::juce_gui_basics
+)
 
-# treat warnings as errors
-# set highest warning level (generate all possible warnings)
-if (MSVC) # if compiler = Microsoft
-    # add_compile_options(/Wall /WX)
-    add_compile_options(/W4)
-endif()
-
-# loop in plugin
-
-add_subdirectory(${LIB_DR}/juce)
-add_subdirectory(${LIB_DR}/serial)
-
-add_subdirectory(app)
+# Setup JUCE for this target
+setup_juce_target(Synth-Engine)

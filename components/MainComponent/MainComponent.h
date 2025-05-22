@@ -11,13 +11,12 @@
 
 // sensor
 // #include "YourPluginName/SerialPortHandler.h"
-class SerialPortHandler;
+// class SerialPortHandler;
 
 // cross-thread communication
 #include <atomic>
 
 class MainComponent  : public juce::Timer,
-                    //    public juce::Component, # <- redundant
                        public juce::AudioAppComponent
 {
 public:
@@ -53,11 +52,8 @@ private:
     std::atomic<float> gx = 0.0f;  // shared between threads
 
     // sensor
-        // include -> class instantiation
-    // SerialPortHandler serialPortHandler;
-        // forward declaration -> pointer
-    std::unique_ptr<SerialPortHandler> serialPortHandler;
-    bool readSensorData = false;
+    // std::unique_ptr<SerialPortHandler> serialPortHandler;
+    // bool readSensorData = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };

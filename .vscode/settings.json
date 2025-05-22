@@ -84,5 +84,8 @@
         "concepts": "cpp",
         "format": "cpp",
         "stop_token": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": true,
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.generator": "Visual Studio 17 2022"
 }

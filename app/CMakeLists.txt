@@ -1,66 +1,51 @@
 cmake_minimum_required(VERSION 4.0)
 
-project(AudioPlugin VERSION 0.1.0)
-
-# analogue of add_executable?
+# Create the main application target using JUCE's helper function
+# This sets up the basic application structure with the specified name and version
 juce_add_gui_app(${PROJECT_NAME}
     TARGET_PREFIX ""  # Optional, removes prefix from target name
     PRODUCT_NAME "MotionSynth"
     VERSION 1.0.0
-    MODULES
-    # specify JUCE modules your application will need in the MODULES list 
-    # ensures modules are compiled into project and made available during build process
-        juce_audio_basics
-        juce_audio_devices
-        juce_audio_utils
-        juce_audio_formats
-        juce_gui_basics
-        juce_gui_extra
-        juce_dsp
-    # Add other modules based on your needs
 )
 
+# Generate JUCE header with project information
+# This creates a header file with project name, version, etc.
+juce_generate_juce_header(${PROJECT_NAME})
 
+# Add source files to the application
 target_sources(${PROJECT_NAME}
     PRIVATE
-        source/Main.cpp
-        source/MainComponent.cpp
-        source/SerialPortHandler.cpp
+        Main.cpp
 )
+
+# Add include directories for finding component headers
 target_include_directories(${PROJECT_NAME}
     PRIVATE
-        include
+        ${CMAKE_SOURCE_DIR}/components
 )
 
+# Link against required libraries
+# PRIVATE means these dependencies are only used by this target and not propagated
+# JuceInterface provides all JUCE-related functionality (definitions, flags, etc.)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    # explicitly links those modules into the final executable
-    # necessary b/c they have external dependencies
-        juce::juce_audio_utils
-        juce::juce_gui_extra
-        # SerialMonitor
-    PUBLIC
-        juce::juce_recommended_config_flags
-        juce::juce_recommended_lto_flags
-        juce::juce_recommended_warning_flags
+        MainComponent
+        JuceInterface
 )
 
-# solve warnings using setup recommended by JUCE
-target_compile_definitions(${PROJECT_NAME}
-    PRIVATE
-        # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
-        JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_gui_app` call
-        JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_gui_app` call
-        JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:${PROJECT_NAME},JUCE_PRODUCT_NAME>"
-        JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:${PROJECT_NAME},JUCE_VERSION>")
+# Setup JUCE for this target
+# This function call links against JuceInterface, which provides all necessary JUCE functionality
+# The target will automatically get all JUCE definitions and recommended flags
+setup_juce_target(${PROJECT_NAME})
 
-
+# Set C++ standard
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_14)
 
+# MSVC-specific settings
 if (MSVC)
-target_compile_definitions(${PROJECT_NAME}
-    PRIVATE
-        _SILENCE_CXX23_ALIGNED_STORAGE_DEPRECATION_WARNING
-        _CRT_SECURE_NO_WARNINGS
-)
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE
+            _SILENCE_CXX23_ALIGNED_STORAGE_DEPRECATION_WARNING
+            _CRT_SECURE_NO_WARNINGS
+    )
 endif()

@@ -4,40 +4,46 @@ project(AudioPlugin VERSION 0.1.0)
 
 # analogue of add_executable?
 juce_add_gui_app(${PROJECT_NAME}
+    TARGET_PREFIX ""  # Optional, removes prefix from target name
+    PRODUCT_NAME "Motion Synth"
+    VERSION 1.0.0
     MODULES
     # specify JUCE modules your application will need in the MODULES list 
     # ensures modules are compiled into project and made available during build process
-        # juce_audio_basics
-        # juce_audio_devices
-        # juce_audio_utils
-        # juce_audio_formats
+        juce_audio_basics
+        juce_audio_devices
+        juce_audio_utils
+        juce_audio_formats
         juce_gui_basics
-        # juce_gui_extra
-        # juce_dsp
+        juce_gui_extra
+        juce_dsp
     # Add other modules based on your needs
 )
 
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        main.cpp
+        source/Main.cpp
+        source/MainComponent.cpp
 )
-
-juce_generate_juce_header(${PROJECT_NAME})
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        include
+)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     # explicitly links those modules into the final executable
     # necessary b/c they have external dependencies
-        # juce::juce_audio_utils
+        juce::juce_audio_utils
         juce::juce_gui_extra
         # SerialMonitor
     PUBLIC
-        # juce::juce_recommended_config_flags
-        # juce::juce_recommended_lto_flags
-        # juce::juce_recommended_warning_flags
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags
 )
-#[[
+
 # solve warnings using setup recommended by JUCE
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
@@ -57,4 +63,3 @@ target_compile_definitions(${PROJECT_NAME}
         _CRT_SECURE_NO_WARNINGS
 )
 endif()
-#]]

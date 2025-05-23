@@ -4,9 +4,23 @@ project(SynthEngine
     LANGUAGES CXX
 )
 
-# set(CMAKE_CXX_STANDARD 23)
-
 add_subdirectory(JUCE)
+
+# JUCEInterface
+add_library(JUCEInterface INTERFACE)
+set(JUCE_MODULES
+    # juce_core
+    # juce_audio_basics
+    # juce_audio_devices
+    # juce_audio_utils
+    # juce_audio_formats
+    juce_gui_basics
+    # juce_gui_extra
+    # juce_dsp
+)
+target_link_libraries(JUCEInterface INTERFACE ${JUCE_MODULES})
+
+add_subdirectory(Components)
 
 add_subdirectory(App)
 

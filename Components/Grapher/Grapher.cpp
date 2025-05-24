@@ -12,3 +12,11 @@ void Grapher::paint(juce::Graphics& g)
     g.setFont(20.0f);
     g.drawText("plot", getLocalBounds(), juce::Justification::centred, true);
 }
+
+juce::Path Grapher::renderBuffer()
+{
+    juce::Path path;
+    path.startNewSubPath(0, 0);
+    path.lineTo(100, 100);
+    return path;
+}

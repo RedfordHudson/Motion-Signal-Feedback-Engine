@@ -1,7 +1,15 @@
 #include "TestComponent.h"
 
+// include in implementation file to isolate compilation of Grapher component
+// switching to pointers with forward declarations is the best way to decouple headers and speed builds
+#include <Grapher.h>
+
 TestComponent::TestComponent()
+    // initialize smart pointer to grapher instance
+    : grapher(std::make_unique<Grapher>())
 {
+    addAndMakeVisible(*grapher);
+
     setSize(800, 600);
 }
 

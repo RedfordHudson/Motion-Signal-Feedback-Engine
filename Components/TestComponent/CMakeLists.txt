@@ -7,10 +7,12 @@ target_include_directories(TestComponent
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# MUST BE PUBLIC TO PROPAGATE TO MAIN APP (TOP-LEVEL EXECUTABLE)
+# Grapher.h in TestComponent.h -> PUBLIC; must progagate to main app (top-level executable)
+# Grapher.h in TestComponent.cpp -> PRIVATE; stays local to TestComponent
 target_link_libraries(TestComponent
     PUBLIC
-        Grapher
+        # Grapher
     PRIVATE
         JUCEInterface
+        Grapher
 )

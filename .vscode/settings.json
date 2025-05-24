@@ -84,6 +84,12 @@
         "concepts": "cpp",
         "format": "cpp",
         "stop_token": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "*.mm": "cpp",
+        "bitset": "cpp",
+        "cwctype": "cpp",
+        "filesystem": "cpp",
+        "fstream": "cpp",
+        "shared_mutex": "cpp"
     }
 }

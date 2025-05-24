@@ -6,7 +6,10 @@ class Ware {
         Ware() {};
         ~Ware() {};
 
-        void test() {
-            std::cout << "working!" << std::endl;
+        void processSample(double sample) {
+            state.set("x", sample);
         }
+    private:
+        juce::NamedValueSet state;
+        // std::string name = "x";
 };

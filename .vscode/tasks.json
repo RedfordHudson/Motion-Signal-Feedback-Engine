@@ -7,7 +7,7 @@
       "command": "cmake --build build",
       "group": {
         "kind": "build",
-        "isDefault": true
+        "isDefault": false
       },
       "problemMatcher": [],
       // enable logging output
@@ -28,9 +28,10 @@
       }
     },
     {
-      "label": "Run Synth (Kill Old First)",
+      "label": "Run Synth",
       "type": "shell",
-      "command": "taskkill /IM SynthEngine.exe /F & ${workspaceFolder}\\build\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
+      "command": "${workspaceFolder}\\build\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
+      // "command": "taskkill /IM SynthEngine.exe /F & ${workspaceFolder}\\build\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
       "problemMatcher": [],
       "group": {
         "kind": "test",
@@ -55,8 +56,12 @@
     {
       "label": "Build and Run Synth",
       "type": "shell",
-      "command": "cmake --build build & taskkill /IM SynthEngine.exe /F & ${workspaceFolder}\\build\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
+      "command": "cmake --build build & ${workspaceFolder}\\build\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
       "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "presentation": {
         "echo": true,
         "reveal": "always",

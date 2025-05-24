@@ -9,7 +9,7 @@ add_subdirectory(JUCE)
 # JUCEInterface
 add_library(JUCEInterface INTERFACE)
 set(JUCE_MODULES
-    # juce_core
+    juce_core
     # juce_audio_basics
     # juce_audio_devices
     # juce_audio_utils
@@ -20,6 +20,7 @@ set(JUCE_MODULES
 )
 target_link_libraries(JUCEInterface INTERFACE ${JUCE_MODULES})
 
+add_subdirectory(Libraries)
 add_subdirectory(Components)
 
 add_subdirectory(App)

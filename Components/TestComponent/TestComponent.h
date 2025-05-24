@@ -2,6 +2,7 @@
 
 // forward declaration
 class Grapher;
+class SerialSimulator;
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
@@ -17,6 +18,8 @@ private:
     // Grapher* grapher;
     // use smart pointer to automatically manage memory and lifecycle
     std::unique_ptr<Grapher> grapher;
+
+    std::unique_ptr<SerialSimulator> serialSimulator;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TestComponent)
 };

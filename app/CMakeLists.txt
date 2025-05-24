@@ -1,7 +1,7 @@
 # JUCE wrapper of add_executable
 juce_add_gui_app(${PROJECT_NAME}
     MODULES
-        juce_gui_basics
+    ${JUCE_MODULES}
 )
 
 # MUST BE LINKED OUTSIDE OF juce_add_gui_app OR ELSE WILL CAUSE LINKER ISSUE

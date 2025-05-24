@@ -1,6 +1,7 @@
 #pragma once
 
 #include <juce_gui_basics/juce_gui_basics.h>
+#include <Grapher.h>
 
 class TestComponent : public juce::Component
 {

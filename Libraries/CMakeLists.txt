@@ -1,1 +1,2 @@
-add_subdirectory(SerialSimulator)
+# add_subdirectory(SerialSimulator)
+add_subdirectory(HumanWare)

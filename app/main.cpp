@@ -1,5 +1,6 @@
 #include <JuceHeader.h>
-#include <TestComponent.h>
+// #include <TestComponent.h>
+#include <AudioTestComponent.h>
 
 class MainWindow : public juce::DocumentWindow
 {
@@ -7,7 +8,8 @@ public:
     MainWindow() : DocumentWindow("Test App", juce::Colours::black, DocumentWindow::allButtons)
     {
         setUsingNativeTitleBar(true);
-        setContentOwned(new TestComponent(), true);
+        // setContentOwned(new TestComponent(), true);
+        setContentOwned(new AudioTestComponent(), true);
         centreWithSize(800, 600);
         setVisible(true);
     }

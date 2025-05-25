@@ -23,7 +23,7 @@ void Grapher::paint(juce::Graphics& g)
 
     // delimit critical section
     {
-        juce::ScopedLock lock(bufferLock);
+        // juce::ScopedLock lock(bufferLock);
         snapshot = buffer;
     }
 
@@ -106,7 +106,7 @@ juce::Path Grapher::renderPlot()
 
 void Grapher::pushSample(double sample)
 {
-    juce::ScopedLock lock(bufferLock);
+    // juce::ScopedLock lock(bufferLock);
     buffer.push_back(sample);
     
     // Clamp buffer size to windowSize

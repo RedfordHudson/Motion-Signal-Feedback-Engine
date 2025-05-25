@@ -15,5 +15,6 @@ target_link_libraries(TestComponent
     PRIVATE
         JUCEInterface
         Grapher
+        HumanWare
         SerialSimulator
 )

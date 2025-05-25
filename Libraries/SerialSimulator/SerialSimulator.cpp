@@ -23,15 +23,15 @@ void SerialSimulator::run()
 
     while (!threadShouldExit())
     {
-        float sample = generateSample();
+        const std::vector<double> sample = generateSample();
         callback(sample);
     }
 }
 
-double SerialSimulator::generateSample()
+const std::vector<double> SerialSimulator::generateSample()
 {
     juce::Thread::sleep(100);
 
     // Gene rate a random double between -1.0 and 1.0
-    return dis(gen);
+    return {dis(gen)};
 }

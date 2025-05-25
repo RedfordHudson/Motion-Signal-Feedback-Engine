@@ -32,13 +32,16 @@ public:
 
         int i = 0;
         for (const auto& [child_name, child] : children) {
+            
             int keys_for_cur_child = child->getSize();
             auto begin = sample.begin() + i;
             auto end = begin + keys_for_cur_child;
             i += keys_for_cur_child;
 
             std::vector<double> sub_sample(begin, end);
+            
             child->processSample(sub_sample);
+            
         }
     }
 
@@ -161,6 +164,7 @@ class Body : public HumanWareNode {
 public:
     static constexpr const char* typeName = "body";
     Body() : HumanWareNode(typeName) {
-        addChild("hand", std::make_shared<Hand>());
+        // addChild("hand", std::make_shared<Hand>());
+        addChild("flex", std::make_shared<FlexSensor>());
     };
 };

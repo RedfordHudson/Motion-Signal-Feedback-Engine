@@ -14,15 +14,15 @@ set(JUCE_MODULES
     # juce_audio_devices
     # juce_audio_utils
     # juce_audio_formats
-    # juce_gui_basics
+    juce_gui_basics
     # juce_gui_extra
     # juce_dsp
 )
 target_link_libraries(JUCEInterface INTERFACE ${JUCE_MODULES})
 
 add_subdirectory(Libraries)
-# add_subdirectory(Components)
+add_subdirectory(Components)
 
-# add_subdirectory(App)
+add_subdirectory(App)
 add_subdirectory(PureTest)
 

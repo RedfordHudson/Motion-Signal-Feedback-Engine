@@ -10,16 +10,23 @@ class AudioTestComponent : public juce::AudioAppComponent
 {
 public:
     AudioTestComponent();
-    ~AudioTestComponent() override;
+    ~AudioTestComponent() override {
+        shutdownAudio();
+    }
 
     // AudioAppComponent overrides
     void prepareToPlay(int samplesPerBlockExpected, double sampleRate) override;
     void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill) override;
-    void releaseResources() override;
+    void releaseResources() override {}
 
     // Component overrides
-    void paint(juce::Graphics& g) override;
-    void resized() override;
+    void paint(juce::Graphics& g) override {
+        g.fillAll(juce::Colours::black);
+        g.setColour(juce::Colours::white);
+        g.setFont(20.0f);
+        g.drawText("Audio Test", getLocalBounds(), juce::Justification::centred, true);
+    }
+    void resized() override {}
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTestComponent)

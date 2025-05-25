@@ -1,0 +1,23 @@
+This tracks all bullshit I encounter, the root cause and solution, to ensure said bullshit never happens again.
+
+======= [ inline destructor x unique_ptr ] =======
+PROBLEM: 
+
+If a parent class's destructor is declared inline (.h), that will force the compiler to generate the destructor code immediately. If the class has pointers, it must delete those pointers. To delete them, it needs to know how the class works, which requires it's definition to be readily available. Forward declaration is not sufficient.
+
+SOLUTIONS:
+
+1. [recommended] Move destructor to .cpp allows destructor to compile after child class has been instantiated.
+
+2. Use raw pointer + manually delete pointer in inline destructor
+  - could cause memory leaks
+
+3. Define class in .h file
+
+== [ build redundancy trap ] ==
+
+If an interface target links to JUCE modules, and those modules are JUCE-style object libraries, then every CMake target that links to that interface target will trigger a new build of those JUCE module object libraries.
+
+CMake treats that as if you're linking directly to juce::juce_gui_basics. And because juce_gui_basics is not a shared/static library, but an object library, its source files are compiled anew into your target.
+
+

@@ -1,7 +1,7 @@
 # JUCE wrapper of add_executable
 juce_add_gui_app(${PROJECT_NAME}
-    MODULES
-        juce_gui_basics
+    # MODULES
+    #     juce_gui_basics
 )
 
 # MUST BE LINKED OUTSIDE OF juce_add_gui_app OR ELSE WILL CAUSE LINKER ISSUE
@@ -18,6 +18,8 @@ target_link_libraries(${PROJECT_NAME}
     # necessary b/c they have external dependencies
         # juce::juce_audio_utils
         juce::juce_gui_extra
+        juce::juce_gui_basics
+        # JUCECoreModules
         TestComponent
     PUBLIC
         # juce::juce_recommended_config_flags

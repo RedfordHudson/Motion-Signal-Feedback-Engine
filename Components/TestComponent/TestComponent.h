@@ -1,6 +1,9 @@
 #pragma once
 
+// #define JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED 1
+
 #include <juce_gui_basics/juce_gui_basics.h>
+#include <librarylib.h>
 
 class TestComponent : public juce::Component
 {

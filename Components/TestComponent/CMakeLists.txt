@@ -9,5 +9,6 @@ target_include_directories(TestComponent
 
 target_link_libraries(TestComponent
     PRIVATE
-        JUCEInterface
+        JUCECoreModules
+        LibraryLib
 )

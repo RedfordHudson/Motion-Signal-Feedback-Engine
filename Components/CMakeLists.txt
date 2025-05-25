@@ -1,1 +1,2 @@
 add_subdirectory(TestComponent)
+add_subdirectory(LibraryLib)

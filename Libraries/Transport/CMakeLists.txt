@@ -6,6 +6,7 @@ add_library(Transport
 target_include_directories(Transport
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/Libraries/Transport
 )
 
 target_link_libraries(Transport

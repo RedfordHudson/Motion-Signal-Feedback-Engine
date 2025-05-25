@@ -32,7 +32,7 @@ void Grapher::paint(juce::Graphics& g)
         return;
     }
 
-    updateRange(); 
+    // updateRange(); 
     
     // Draw the waveform
     g.setColour(juce::Colours::white);
@@ -104,7 +104,7 @@ juce::Path Grapher::renderPlot()
     return path;
 }
 
-void Grapher::pushSample(double sample)
+void Grapher::pushSample(const double sample)
 {
     // juce::ScopedLock lock(bufferLock);
     buffer.push_back(sample);

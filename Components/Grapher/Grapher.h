@@ -11,7 +11,7 @@ public:
     void resized() override;
 
     // Add a new sample to the buffer
-    void pushSample(double sample);
+    void pushSample(const double sample);
 
 private:
     // Convert buffer value to y coordinate
@@ -33,7 +33,7 @@ private:
     double minValue = 0.0;
     double maxValue = 1.0;
 
-    int windowSize = 1000;
+    int windowSize = 500;
 
     // thread safety
     juce::CriticalSection bufferLock;

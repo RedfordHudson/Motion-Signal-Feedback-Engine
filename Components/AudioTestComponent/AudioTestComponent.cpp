@@ -1,10 +1,16 @@
 #include "AudioTestComponent.h"
 
+#include <Transport.h>
+#include <Grapher.h>
+
 AudioTestComponent::AudioTestComponent()
-    : transport(std::make_unique<Transport>(160))
+    : transport(std::make_unique<Transport>(160)),
+    grapher(std::make_unique<Grapher>())
 {
     setSize(800, 600);
     setAudioChannels(0, 2); // 0 input channels, 2 output channels
+
+    addAndMakeVisible(*grapher);
 
 }
 
@@ -23,5 +29,6 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
     // Clear the buffer
     bufferToFill.clearActiveBufferRegion();
 
-    transport->processBlock(bufferToFill);
+    const double phase = transport->processBlock(bufferToFill);
+    grapher->pushSample(phase);
 }

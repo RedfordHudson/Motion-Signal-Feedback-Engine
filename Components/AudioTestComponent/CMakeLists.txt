@@ -11,4 +11,5 @@ target_link_libraries(AudioTestComponent
     PRIVATE
         JUCEInterface
         Transport
+        Grapher
 )

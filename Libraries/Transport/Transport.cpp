@@ -23,7 +23,7 @@ void Transport::prepareToPlay(const double sampleRate) {
     //     << std::endl;
 }
 
-void Transport::processBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
+const double Transport::processBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
     const int buffer_size = bufferToFill.numSamples;
     // buffer_size ~= 480
     
@@ -43,6 +43,9 @@ void Transport::processBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
         triggerBeat();
         samples_for_current_beat -= static_cast<int>(SAMPLES_PER_BEAT);
     }
+
+    const double phase = samples_for_current_beat / SAMPLES_PER_BEAT;
+    return phase;
 }
 
 void Transport::triggerBeat() {

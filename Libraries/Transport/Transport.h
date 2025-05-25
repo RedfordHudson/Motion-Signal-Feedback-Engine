@@ -8,10 +8,10 @@ public:
 
     void prepareToPlay(const double sampleRate);
 
-    void processBlock(const juce::AudioSourceChannelInfo& bufferToFill);
+    const double processBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 
     void triggerBeat();
-    
+
 protected:
     const int BASELINE_BPM;
 private:

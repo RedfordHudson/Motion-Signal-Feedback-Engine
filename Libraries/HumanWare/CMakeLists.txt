@@ -1,4 +1,5 @@
 add_library(HumanWare
+    SensorWare.h
     HumanWare.h
 )
 

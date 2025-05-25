@@ -76,6 +76,29 @@
           "args": ["/c"]
         }
       }
+    },{
+      "label": "Build and Test",
+      "type": "shell",
+      "command": "cmake --build build & ${workspaceFolder}\\build\\PureTest\\Debug\\PureTest.exe",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/c"]
+        }
+      }
     }
   ]
 }

@@ -1,20 +1,23 @@
-// #include <HumanWare.h>
-#define JUCE_UNIT_TESTS 1
+#include <juce_core/juce_core.h>
+#include <iostream>
+#include <memory>
 #include <HumanWareTests.h>
 
-int main()
-{
-    // Initialize JUCE
-    // juce::ScopedJuceInitialiser_GUI juceInit;
-    
-    // Set up console logging
-    // juce::Logger::setCurrentLogger(new juce::FileLogger(juce::File::getSpecialLocation(juce::File::userHomeDirectory)
-    //                                                   .getChildFile("test_output.log"), "Test Log"));
-    
-    juce::UnitTestRunner testRunner;
-    std::cout << "Running tests..." << std::endl;
-    testRunner.runAllTests();
-    std::cout << "Tests complete" << std::endl;
+// Custom logger that redirects to stdout
+class StdoutLogger : public juce::Logger {
+    void logMessage(const juce::String& message) override {
+        std::cout << message << std::endl;
+    }
+};
+
+int main() {
+    // Set up logger so JUCE logs go to stdout
+    auto logger = std::make_unique<StdoutLogger>();
+    juce::Logger::setCurrentLogger(logger.get());
+
+    // Run all tests (with verbose = true)
+    juce::UnitTestRunner runner;
+    runner.runAllTests(true);
 
     return 0;
 }

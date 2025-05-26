@@ -23,7 +23,10 @@ endfunction()
 
 
 foreach(LIB ${LIBS})
-    # add_subdirectory(${LIB})
     add_juce_library(${LIB})
+endforeach()
 
+
+foreach(LIB ${LIBS})
+    add_subdirectory(${LIB})
 endforeach()

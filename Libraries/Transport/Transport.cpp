@@ -1,11 +1,16 @@
 #include "Transport.h"
 
+#include <Cycle.h>
+
 Transport::Transport(const int BASELINE_BPM)
-    : BASELINE_BPM(BASELINE_BPM)
+    : BASELINE_BPM(BASELINE_BPM),
+    cycle(std::make_unique<Cycle>(8))
 {
     samples_for_current_beat = 0;
     beat_count = 0;
 }
+
+Transport::~Transport() {}
 
 void Transport::prepareToPlay(const float sampleRate) { 
     SAMPLE_RATE = sampleRate; // = 48k
@@ -15,6 +20,8 @@ void Transport::prepareToPlay(const float sampleRate) {
 
     // samples/beat = (samples/second) / (beats/second)
     SAMPLES_PER_BEAT = SAMPLE_RATE / beats_per_second; // = 18k
+
+    // cycle->prepareToPlay(SAMPLES_PER_BEAT);
 
     
     // std::cout << "sample rate: " << std::to_string(SAMPLE_RATE) 
@@ -46,11 +53,19 @@ const std::tuple<int,float> Transport::processBlock(const juce::AudioSourceChann
 
     const float phase = samples_for_current_beat / SAMPLES_PER_BEAT;
 
+    // auto [cycleBeatSampleIndex, cyclePhase] = cycle->processBlock(bufferToFill);
+
     return std::make_tuple(beatSampleIndex, phase);
+    // return std::make_tuple(beatSampleIndex, phase, cycleBeatSampleIndex, cyclePhase);
 }
 
 void Transport::triggerBeat() {
     beat_count++;
+
+    if (beat_count % 2 == 0)
+        cycle->updatePattern({0,3});
+    else
+        cycle->updatePattern({0,3,6});
     
-    std::cout << "beat: " << std::to_string(beat_count) << std::endl;
+    // std::cout << "beat: " << std::to_string(beat_count) << std::endl;
 }

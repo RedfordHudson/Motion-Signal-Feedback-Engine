@@ -1,10 +1,12 @@
 #include <iostream>
 #include <juce_audio_utils/juce_audio_utils.h>
 
+class Cycle;
+
 class Transport {
 public:
     Transport(const int BASELINE_BPM);
-    ~Transport() {}
+    ~Transport();
 
     void prepareToPlay(const float sampleRate);
 
@@ -20,4 +22,6 @@ private:
 
     float SAMPLE_RATE;
     float SAMPLES_PER_BEAT;
+
+    std::unique_ptr<Cycle> cycle;
 };

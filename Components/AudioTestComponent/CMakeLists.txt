@@ -12,7 +12,6 @@ target_link_libraries(AudioTestComponent
         JUCEInterface
 
         Transport
-        Cycle
         OscillatorWrapper
         
         Grapher

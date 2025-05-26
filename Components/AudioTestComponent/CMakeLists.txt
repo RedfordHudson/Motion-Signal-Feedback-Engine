@@ -10,6 +10,10 @@ target_include_directories(AudioTestComponent
 target_link_libraries(AudioTestComponent
     PRIVATE
         JUCEInterface
+
         Transport
+        Amplitude
+        Cycle
+        
         Grapher
 )

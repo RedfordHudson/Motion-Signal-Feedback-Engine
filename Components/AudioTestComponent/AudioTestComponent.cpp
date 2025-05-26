@@ -6,6 +6,7 @@
 AudioTestComponent::AudioTestComponent()
     : transport(std::make_unique<Transport>(160)),
     grapher(std::make_unique<Grapher>())
+    // oscillator()
 {
     setSize(800, 600);
     setAudioChannels(0, 2); // 0 input channels, 2 output channels

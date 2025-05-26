@@ -7,7 +7,7 @@
 // #include <juce_audio_basics/juce_audio_basics.h>
 // #include <juce_audio_devices/juce_audio_devices.h>
 
-class SerialSimulator;
+class SerialMonitor;
 class Body;
 class Transport;
 class OscillatorWrapper;
@@ -34,17 +34,11 @@ public:
     void resized() override {}
 
 private:
-    std::unique_ptr<SerialSimulator> serialSimulator;
+    std::unique_ptr<SerialMonitor> serialMonitor;
     std::unique_ptr<Body> body;
-
-    juce::CriticalSection bodyLock;
-    std::function<void()> onBodyUpdated;
-
     std::unique_ptr<Transport> transport;
     std::unique_ptr<OscillatorWrapper> oscillator;
     std::unique_ptr<GraphVector> graphVector;
-
-    float flexValue;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTestComponent)
 };

@@ -4,5 +4,5 @@ target_link_libraries(AudioTestComponent
         OscillatorWrapper
         GraphVector
         HumanWare
-        SerialSimulator
+        SerialMonitor
 )

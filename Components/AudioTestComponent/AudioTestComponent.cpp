@@ -1,6 +1,6 @@
 #include "AudioTestComponent.h"
 
-#include <SerialSimulator.h>
+#include <SerialMonitor.h>
 #include <HumanWare.h>
 #include <Transport.h>
 #include <OscillatorWrapper.h>
@@ -8,7 +8,7 @@
 
 AudioTestComponent::AudioTestComponent()
     : 
-    serialSimulator(std::make_unique<SerialSimulator>()),
+    serialMonitor(std::make_unique<SerialMonitor>("monitor",6)),
     body(std::make_unique<Body>()),
     transport(std::make_unique<Transport>(40)),
     oscillator(std::make_unique<OscillatorWrapper>(300.f)),
@@ -19,29 +19,14 @@ AudioTestComponent::AudioTestComponent()
 
     addAndMakeVisible(*graphVector);
 
-    flexValue = 0;
-    
-    onBodyUpdated = [this]() {
-        double proxyFlexValue;
-        {
-            // scoped lock
-            const juce::ScopedLock sl(bodyLock);
-            proxyFlexValue = body->getChild("flex")->getValue("x");
-        }
-        flexValue = proxyFlexValue;
-        // grapher->pushSample(flexValue);
-    };
+    serialMonitor->setCallback([this](const std::vector<float> sample) {
+        juce::MessageManager::callAsync([this, sample] {
+            body->processSample(sample);
 
-    // set callback for serial simulator
-    serialSimulator->setCallback([this](const std::vector<float> sample) {
-        // scoped lock
-        const juce::ScopedLock sl(bodyLock);
-        
-        body->processSample(sample);
-        onBodyUpdated();
+        });
     });
 
-    serialSimulator->startThread();
+    serialMonitor->start();
 }
 
 AudioTestComponent::~AudioTestComponent() {
@@ -66,6 +51,7 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
 
     oscillator->processBlock(buffer,cycleBeatSampleIndex);
 
+    const float x = body->getChild("hand")->getChild("accel")->getValue("x");
 
-    graphVector->pushSample({flexValue,phase,cyclePhase});
+    graphVector->pushSample({x,phase,cyclePhase});
 }

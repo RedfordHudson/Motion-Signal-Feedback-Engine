@@ -26,3 +26,7 @@ add_subdirectory(Components)
 add_subdirectory(App)
 # add_subdirectory(PureTest)
 
+# Force serial PDB writes
+# if(MSVC)
+#     add_compile_options(/FS)
+# endif()

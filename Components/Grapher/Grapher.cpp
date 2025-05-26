@@ -52,9 +52,6 @@ void Grapher::updateRange()
         return;
     }
     
-    minValue = snapshot[0];
-    maxValue = snapshot[0];
-    
     for (const auto& value : snapshot)
     {
         minValue = std::min(minValue, value);

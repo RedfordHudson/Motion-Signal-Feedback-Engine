@@ -6,7 +6,7 @@
 GraphVector::GraphVector(const int size)
     : size(size)
 {
-    const int width = 600;
+    const int width = 800;
     const int height = 600;
 
     for (int i = 0; i < size; i++) {

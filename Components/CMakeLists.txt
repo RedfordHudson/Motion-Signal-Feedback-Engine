@@ -1,5 +1,5 @@
-# set(COMPONENTS AudioTestComponent GraphVector Grapher)
-set(COMPONENTS TestComponent)
+set(COMPONENTS AudioTestComponent GraphVector Grapher)
+# set(COMPONENTS TestComponent)
 
 function(add_juce_library TARGET_NAME)
 
@@ -24,10 +24,6 @@ foreach(COMP ${COMPONENTS})
     add_juce_library(${COMP})
 endforeach()
 
-
-# Force serial PDB writes
-if(MSVC)
-    add_compile_options(/FS)
-endif()
-
-add_subdirectory(TestComponent)
+foreach(COMP ${COMPONENTS})
+    add_subdirectory(${COMP})
+endforeach()

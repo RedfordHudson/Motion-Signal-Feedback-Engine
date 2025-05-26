@@ -20,4 +20,6 @@ If an interface target links to JUCE modules, and those modules are JUCE-style o
 
 CMake treats that as if you're linking directly to juce::juce_gui_basics. And because juce_gui_basics is not a shared/static library, but an object library, its source files are compiled anew into your target.
 
+== [ crashing ] ==
 
+If it crashes mid-run, it's probably HumanWare receiving incorrectly sized samples.

@@ -23,14 +23,14 @@ void Transport::prepareToPlay(const float sampleRate) {
     //     << std::endl;
 }
 
-const float Transport::processBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
+const std::tuple<int,float> Transport::processBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
     const int buffer_size = bufferToFill.numSamples;
     // buffer_size ~= 480
     
     samples_for_current_beat += buffer_size;
 
     // get index in buffer when next beat should start
-    int beat_sample_index = static_cast<int>(SAMPLES_PER_BEAT) - samples_for_current_beat;
+    const int beatSampleIndex = static_cast<int>(SAMPLES_PER_BEAT) - samples_for_current_beat;
     
     // std::cout << "buffer size: " << std::to_string(buffer_size) 
     //     << " samples: " << std::to_string(samples_for_current_beat) 
@@ -38,14 +38,15 @@ const float Transport::processBlock(const juce::AudioSourceChannelInfo& bufferTo
     //     << std::endl;
 
     // beat starts in current buffer -> trigger beat
-    if (beat_sample_index < buffer_size) {
+    if (beatSampleIndex < buffer_size) {
     // if (samples_for_current_beat > static_cast<int>(SAMPLES_PER_BEAT)) {
         triggerBeat();
         samples_for_current_beat -= static_cast<int>(SAMPLES_PER_BEAT);
     }
 
     const float phase = samples_for_current_beat / SAMPLES_PER_BEAT;
-    return phase;
+
+    return std::make_tuple(beatSampleIndex, phase);
 }
 
 void Transport::triggerBeat() {

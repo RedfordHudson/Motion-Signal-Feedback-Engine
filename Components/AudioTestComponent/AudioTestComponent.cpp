@@ -21,7 +21,6 @@ AudioTestComponent::~AudioTestComponent() {
 
 void AudioTestComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
-
     oscillator->prepareToPlay(samplesPerBlockExpected,sampleRate);
 
     transport->prepareToPlay(sampleRate);
@@ -33,8 +32,10 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
     bufferToFill.clearActiveBufferRegion();
 
     juce::AudioBuffer<float>& buffer = *bufferToFill.buffer;
-    oscillator->processBlock(buffer);
 
-    const float phase = transport->processBlock(bufferToFill);
+    auto [beatSampleIndex, phase] = transport->processBlock(bufferToFill);
+
+    oscillator->processBlock(buffer,beatSampleIndex);
+
     grapher->pushSample(phase);
 }

@@ -8,7 +8,7 @@ public:
 
     void prepareToPlay(const float sampleRate);
 
-    const float processBlock(const juce::AudioSourceChannelInfo& bufferToFill);
+    const std::tuple<int,float> processBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 
     void triggerBeat();
 

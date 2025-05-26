@@ -8,6 +8,7 @@
 // #include <juce_audio_devices/juce_audio_devices.h>
 
 class Transport;
+class OscillatorWrapper;
 class Grapher;
 
 class AudioTestComponent : public juce::AudioAppComponent
@@ -32,9 +33,8 @@ public:
 
 private:
     std::unique_ptr<Transport> transport;
+    std::unique_ptr<OscillatorWrapper> oscillator;
     std::unique_ptr<Grapher> grapher;
-
-    juce::dsp::Oscillator<float> oscillator;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTestComponent)
 };

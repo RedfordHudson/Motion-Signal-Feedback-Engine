@@ -1,7 +1,7 @@
 # add_subdirectory(SerialSimulator)
 # add_subdirectory(HumanWare)
 
-set(LIBS Transport Amplitude Cycle)
+set(LIBS Transport OscillatorWrapper Amplitude Cycle)
 
 function(add_juce_library TARGET_NAME)
 

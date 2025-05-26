@@ -2,17 +2,17 @@
 
 #include <Transport.h>
 #include <OscillatorWrapper.h>
-#include <Grapher.h>
+#include <GraphVector.h>
 
 AudioTestComponent::AudioTestComponent()
     : transport(std::make_unique<Transport>(160)),
     oscillator(std::make_unique<OscillatorWrapper>(300.f)),
-    grapher(std::make_unique<Grapher>())
+    graphVector(std::make_unique<GraphVector>(2))
 {
     setSize(800, 600);
     setAudioChannels(0, 2); // 0 input channels, 2 output channels
 
-    addAndMakeVisible(*grapher);
+    addAndMakeVisible(*graphVector);
 }
 
 AudioTestComponent::~AudioTestComponent() {
@@ -37,5 +37,5 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
 
     oscillator->processBlock(buffer,beatSampleIndex);
 
-    grapher->pushSample(phase);
+    graphVector->pushSample({phase,cyclePhase});
 }

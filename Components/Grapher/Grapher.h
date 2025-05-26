@@ -5,7 +5,7 @@
 class Grapher : public juce::Component
 {
 public:
-    Grapher();
+    Grapher(const int width, const int height);
 
     void paint(juce::Graphics& g) override;
     void resized() override;

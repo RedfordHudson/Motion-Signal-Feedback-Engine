@@ -1,13 +1,11 @@
 #include "Grapher.h"
 #include <iostream>
 
-Grapher::Grapher()
+Grapher::Grapher(const int width, const int height)
 {
-    setSize(300, 300);
+    setSize(width, height);
     
     // Initialize with some random test data
-    
-    buffer = {1.0,4.0,3.0};
     
     updateRange();
 }

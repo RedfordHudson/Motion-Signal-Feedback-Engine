@@ -51,10 +51,10 @@ const std::tuple<int,float,int,float> Transport::processBlock(const juce::AudioS
 
     const float phase = samples_for_current_beat / SAMPLES_PER_BEAT;
 
-    auto [cycleBeatSampleIndex, cycleBeatCount] = cycle->processBlock(buffer_size);
+    auto [cycleBeatSampleIndex, cyclePhase] = cycle->processBlock(buffer_size);
 
     // return std::make_tuple(beatSampleIndex, phase);
-    return std::make_tuple(beatSampleIndex, phase, cycleBeatSampleIndex, cycleBeatCount);
+    return std::make_tuple(beatSampleIndex, phase, cycleBeatSampleIndex, cyclePhase);
 }
 
 void Transport::triggerBeat() {

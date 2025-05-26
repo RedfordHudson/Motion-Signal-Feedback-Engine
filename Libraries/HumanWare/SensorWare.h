@@ -17,6 +17,8 @@ public:
 
     // only used in SensorWareNodes
     virtual const float getValue(const std::string& key) const = 0;
+    virtual const juce::NamedValueSet& getState() const = 0;
+
 
     // only used in HumanWareNodes
     virtual std::shared_ptr<WareNode> getChild(const std::string& name) const = 0;
@@ -33,7 +35,7 @@ class SensorWareNode : public WareNode {
 public:
     SensorWareNode(const std::string& name) : WareNode(name) {};
 
-    const juce::NamedValueSet& getState() const {
+    const juce::NamedValueSet& getState() const override {
         return state;
     }
 

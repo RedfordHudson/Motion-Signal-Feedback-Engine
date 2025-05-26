@@ -1,4 +1,6 @@
-set(LIBS Transport OscillatorWrapper Cycle SerialSimulator)
+# set(LIBS Transport OscillatorWrapper Cycle SerialSimulator)
+set(LIBS SerialMonitor)
+# HumanWare is added separately (bottom) b/c it has different architecture
 
 function(add_juce_library TARGET_NAME)
 

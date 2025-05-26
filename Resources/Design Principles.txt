@@ -1,0 +1,17 @@
+These are project standards to keep in mind.
+
+== [ float > double ] ==
+
+Principle: Use floats rather than doubles
+
+Justification:
+- more efficient
+- lower precision
+- lower latency
+- default JUCE type
+
+== [ multithreading: async vs lock ] ==
+
+Use locks or mutexes when multiple threads need to read and write shared mutable data
+
+Use async callbacks when one thread just needs to hand off data to another

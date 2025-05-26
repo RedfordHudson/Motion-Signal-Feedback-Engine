@@ -2,39 +2,33 @@
 
 // include in implementation file to isolate compilation of Grapher component
 // switching to pointers with forward declarations is the best way to decouple headers and speed builds
-#include <Grapher.h>
 #include <HumanWare.h>
-#include <SerialSimulator.h>
+#include <SerialMonitor.h>
 
 #include <iostream>
 
 TestComponent::TestComponent()
     // initialize smart pointer to grapher instance
-    : grapher(std::make_unique<Grapher>()),
-    body(std::make_unique<Body>()),
-    serialSimulator(std::make_unique<SerialSimulator>())
+    : body(std::make_unique<Body>()),
+    serialMonitor(std::make_unique<SerialMonitor>("monitor",6))
 {
-    addAndMakeVisible(*grapher);
     setSize(800, 600);
 
-    onBodyUpdated = [this]() {
-        double flexValue;
-        {
-            // scoped lock
-            const juce::ScopedLock sl(bodyLock);
-            flexValue = body->getChild("flex")->getValue("x");
-        }
-        grapher->pushSample(flexValue);
-    };
+    serialMonitor->setCallback([this](const std::vector<float> sample) {
+        juce::MessageManager::callAsync([this, sample] {
+            body->processSample(sample);
 
-    // set callback for serial simulator
-    serialSimulator->setCallback([this](const std::vector<double> sample) {
-        // scoped lock
-        const juce::ScopedLock sl(bodyLock);
-        
-        body->processSample(sample);
-        onBodyUpdated();
+            const juce::NamedValueSet& gyro = body->getChild("hand")->getChild("gyro")->getState();
+
+            std::cout << "x: " << std::to_string(static_cast<float>(gyro["x"]))
+                << "y: " << std::to_string(static_cast<float>(gyro["y"]))
+                << "z: " << std::to_string(static_cast<float>(gyro["z"]))
+                << std::endl;
+        });
     });
+
+    serialMonitor->start();
+
 }
 
 void TestComponent::paint(juce::Graphics& g)

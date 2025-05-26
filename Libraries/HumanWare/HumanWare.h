@@ -59,6 +59,10 @@ public:
     }
 
     const float getValue(const std::string& key) const override { return -1; }
+    const juce::NamedValueSet& getState() const override { 
+        static const juce::NamedValueSet empty_state;
+        return empty_state; 
+    }
 
 private:
     std::vector<std::pair<std::string, std::shared_ptr<WareNode>>> children;
@@ -154,7 +158,7 @@ public:
     Hand() : HumanWareNode(typeName) {
         addChild("gyro", std::make_shared<Gyroscope>());
         addChild("accel", std::make_shared<Accelerometer>());
-        addChild("fv", std::make_shared<FingerVector>(2));
+        // addChild("fv", std::make_shared<FingerVector>(2));
     }
 };
 
@@ -164,7 +168,7 @@ class Body : public HumanWareNode {
 public:
     static constexpr const char* typeName = "body";
     Body() : HumanWareNode(typeName) {
-        // addChild("hand", std::make_shared<Hand>());
-        addChild("flex", std::make_shared<FlexSensor>());
+        addChild("hand", std::make_shared<Hand>());
+        // addChild("flex", std::make_shared<FlexSensor>());
     };
 };

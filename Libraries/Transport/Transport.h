@@ -6,9 +6,9 @@ public:
     Transport(const int BASELINE_BPM);
     ~Transport() {}
 
-    void prepareToPlay(const double sampleRate);
+    void prepareToPlay(const float sampleRate);
 
-    const double processBlock(const juce::AudioSourceChannelInfo& bufferToFill);
+    const float processBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 
     void triggerBeat();
 
@@ -18,6 +18,6 @@ private:
     int samples_for_current_beat;
     int beat_count;
 
-    double SAMPLE_RATE;
-    double SAMPLES_PER_BEAT;
+    float SAMPLE_RATE;
+    float SAMPLES_PER_BEAT;
 };

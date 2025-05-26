@@ -2,7 +2,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_audio_utils/juce_audio_utils.h>
-// #include <juce_dsp/juce_dsp.h>
+#include <juce_dsp/juce_dsp.h>
 
 // #include <juce_audio_basics/juce_audio_basics.h>
 // #include <juce_audio_devices/juce_audio_devices.h>
@@ -34,7 +34,7 @@ private:
     std::unique_ptr<Transport> transport;
     std::unique_ptr<Grapher> grapher;
 
-    // juce::dsp::Oscillator oscillator;
+    // juce::dsp::Oscillator<float> oscillator;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTestComponent)
 };

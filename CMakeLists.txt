@@ -16,7 +16,7 @@ set(JUCE_MODULES
     # juce_audio_formats
     juce_gui_basics
     # juce_gui_extra
-    # juce_dsp
+    juce_dsp
 )
 target_link_libraries(JUCEInterface INTERFACE ${JUCE_MODULES})
 

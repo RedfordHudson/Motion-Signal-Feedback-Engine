@@ -4,7 +4,7 @@
 class SerialSimulator : public juce::Thread
 {
     public:
-        using Callback = std::function<void(const std::vector<double>)>;
+        using Callback = std::function<void(const std::vector<float>)>;
 
         SerialSimulator();
         ~SerialSimulator();
@@ -12,7 +12,7 @@ class SerialSimulator : public juce::Thread
         void run() override;
         void setCallback(Callback callback);
 
-        const std::vector<double> generateSample();
+        const std::vector<float> generateSample();
     private:
 
         Callback callback;

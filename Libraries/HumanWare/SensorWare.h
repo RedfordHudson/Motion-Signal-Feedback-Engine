@@ -7,7 +7,7 @@ public:
     WareNode(const std::string& name) : name(name) {};
     virtual ~WareNode() = default;
 
-    virtual void processSample(const std::vector<double>& sample) = 0;
+    virtual void processSample(const std::vector<float>& sample) = 0;
 
     // const before -> return type
     // const after -> does not modify object
@@ -16,7 +16,7 @@ public:
     virtual const std::vector<std::string> generateDecoderKey() const = 0;
 
     // only used in SensorWareNodes
-    virtual const double getValue(const std::string& key) const = 0;
+    virtual const float getValue(const std::string& key) const = 0;
 
     // only used in HumanWareNodes
     virtual std::shared_ptr<WareNode> getChild(const std::string& name) const = 0;
@@ -37,7 +37,7 @@ public:
         return state;
     }
 
-    void processSample(const std::vector<double>& sample) override {
+    void processSample(const std::vector<float>& sample) override {
 
         // assert that sample and key size are equal
         jassert(sample.size() == getSize());
@@ -48,9 +48,9 @@ public:
         }
     }
     
-    const double getValue(const std::string& key) const override {
+    const float getValue(const std::string& key) const override {
         jassert(std::find(getKeys().begin(), getKeys().end(), key) != getKeys().end());
-        return static_cast<double>(state[juce::Identifier(key)]);
+        return static_cast<float>(state[juce::Identifier(key)]);
     }
 
     const int getSize() const override {

@@ -64,7 +64,7 @@ void Grapher::updateRange()
     }
     
     // Add a small margin to the range
-    double range = maxValue - minValue;
+    float range = maxValue - minValue;
     if (range == 0.0) range = 1.0;  // Prevent division by zero
     minValue -= range * 0.1;
     maxValue += range * 0.1;
@@ -104,7 +104,7 @@ juce::Path Grapher::renderPlot()
     return path;
 }
 
-void Grapher::pushSample(const double sample)
+void Grapher::pushSample(const float sample)
 {
     // juce::ScopedLock lock(bufferLock);
     buffer.push_back(sample);

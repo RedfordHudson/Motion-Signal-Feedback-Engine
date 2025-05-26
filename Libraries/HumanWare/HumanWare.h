@@ -27,7 +27,7 @@ public:
         return size;
     }
 
-    void processSample(const std::vector<double>& sample) override {
+    void processSample(const std::vector<float>& sample) override {
         jassert(sample.size() == getSize());
 
         int i = 0;
@@ -38,7 +38,7 @@ public:
             auto end = begin + keys_for_cur_child;
             i += keys_for_cur_child;
 
-            std::vector<double> sub_sample(begin, end);
+            std::vector<float> sub_sample(begin, end);
             
             child->processSample(sub_sample);
             
@@ -58,7 +58,7 @@ public:
         return decoder_key;
     }
 
-    const double getValue(const std::string& key) const override { return -1; }
+    const float getValue(const std::string& key) const override { return -1; }
 
 private:
     std::vector<std::pair<std::string, std::shared_ptr<WareNode>>> children;
@@ -102,14 +102,14 @@ public:
         return num_children * keys_per_child;
     }
 
-    void processSample(const std::vector<double>& sample) override {
+    void processSample(const std::vector<float>& sample) override {
         jassert(sample.size() == getSize());
         // jassert(sample.size() == static_cast<size_t>(getSize()));
 
         for (int i = 0; i < num_children; ++i) {
             auto begin = sample.begin() + i * keys_per_child;
             auto end = begin + keys_per_child;
-            std::vector<double> sub_sample(begin, end);
+            std::vector<float> sub_sample(begin, end);
 
             children[i]->processSample(sub_sample);
         }
@@ -131,7 +131,7 @@ public:
         return decoder_key;
     }
 
-    const double getValue(const std::string& key) const override { return -1; }
+    const float getValue(const std::string& key) const override { return -1; }
 
 protected:
     int num_children;

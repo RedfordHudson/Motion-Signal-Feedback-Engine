@@ -30,6 +30,6 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
     // Clear the buffer
     bufferToFill.clearActiveBufferRegion();
 
-    const double phase = transport->processBlock(bufferToFill);
+    const float phase = transport->processBlock(bufferToFill);
     grapher->pushSample(phase);
 }

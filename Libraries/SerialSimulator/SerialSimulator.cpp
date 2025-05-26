@@ -23,15 +23,17 @@ void SerialSimulator::run()
 
     while (!threadShouldExit())
     {
-        const std::vector<double> sample = generateSample();
+        const std::vector<float> sample = generateSample();
         callback(sample);
     }
 }
 
-const std::vector<double> SerialSimulator::generateSample()
+const std::vector<float> SerialSimulator::generateSample()
 {
     juce::Thread::sleep(100);
 
-    // Gene rate a random double between -1.0 and 1.0
-    return {dis(gen)};
+    // Gene rate a random float between -1.0 and 1.0
+    float sample = static_cast<float>(dis(gen));
+
+    return {sample};
 }

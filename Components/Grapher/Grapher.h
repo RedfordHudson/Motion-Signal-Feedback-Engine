@@ -11,7 +11,7 @@ public:
     void resized() override;
 
     // Add a new sample to the buffer
-    void pushSample(const double sample);
+    void pushSample(const float sample);
 
 private:
     // Convert buffer value to y coordinate
@@ -25,13 +25,13 @@ private:
 
     juce::Path renderPlot();
 
-    std::vector<double> buffer;
-    std::vector<double> snapshot;;
+    std::vector<float> buffer;
+    std::vector<float> snapshot;;
     float margin = 20.0f;  // Margin around the plot
     
     // Track min/max values for scaling
-    double minValue = 0.0;
-    double maxValue = 1.0;
+    float minValue = 0.0;
+    float maxValue = 1.0;
 
     int windowSize = 500;
 

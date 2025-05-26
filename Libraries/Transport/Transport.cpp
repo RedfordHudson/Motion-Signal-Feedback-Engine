@@ -7,11 +7,11 @@ Transport::Transport(const int BASELINE_BPM)
     beat_count = 0;
 }
 
-void Transport::prepareToPlay(const double sampleRate) { 
+void Transport::prepareToPlay(const float sampleRate) { 
     SAMPLE_RATE = sampleRate; // = 48k
 
     // beats/second = (beats/minute) * (minutes/second)
-    double beats_per_second = BASELINE_BPM / 60.0;
+    float beats_per_second = BASELINE_BPM / 60.0;
 
     // samples/beat = (samples/second) / (beats/second)
     SAMPLES_PER_BEAT = SAMPLE_RATE / beats_per_second; // = 18k
@@ -23,7 +23,7 @@ void Transport::prepareToPlay(const double sampleRate) {
     //     << std::endl;
 }
 
-const double Transport::processBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
+const float Transport::processBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
     const int buffer_size = bufferToFill.numSamples;
     // buffer_size ~= 480
     
@@ -44,7 +44,7 @@ const double Transport::processBlock(const juce::AudioSourceChannelInfo& bufferT
         samples_for_current_beat -= static_cast<int>(SAMPLES_PER_BEAT);
     }
 
-    const double phase = samples_for_current_beat / SAMPLES_PER_BEAT;
+    const float phase = samples_for_current_beat / SAMPLES_PER_BEAT;
     return phase;
 }
 

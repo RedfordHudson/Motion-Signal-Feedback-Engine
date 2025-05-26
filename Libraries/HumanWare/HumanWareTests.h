@@ -23,51 +23,51 @@ public:
 
     void testFlexSensor() {
         FlexSensor flex;
-        std::vector<double> sample = {1.0};
+        std::vector<float> sample = {1.0};
         flex.processSample(sample);
         
         expectEquals(flex.getSize(), 1, "Gyro Size");
-        expectEquals(flex.getValue("x"), 1.0, "Flex State Capture");
+        expectEquals(flex.getValue("x"), (float)1.0, "Flex State Capture");
         expect(vectorsAreEqual(flex.generateDecoderKey(),{"x"}), "Flex Decoder");
     }
 
     void testGyroscope() {
         Gyroscope gyro;
-        std::vector<double> sample = {1.0,2.0,3.0};
+        std::vector<float> sample = {1.0,2.0,3.0};
         gyro.processSample(sample);
         
         expectEquals(gyro.getSize(), 3, "Gyro Size");
-        expectEquals(gyro.getValue("x"), 1.0, "Gyro State Capture");
-        expectEquals(gyro.getValue("y"), 2.0, "Gyro State Capture");
-        expectEquals(gyro.getValue("z"), 3.0, "Gyro State Capture");
+        expectEquals(gyro.getValue("x"), (float)1.0, "Gyro State Capture");
+        expectEquals(gyro.getValue("y"), (float)2.0, "Gyro State Capture");
+        expectEquals(gyro.getValue("z"), (float)3.0, "Gyro State Capture");
         expect(vectorsAreEqual(gyro.generateDecoderKey(),{"x","y","z"}), "Gyro Decoder");
     }
 
     void testFingerVector() {
         FingerVector fv(2);
-        std::vector<double> sample = {1.0,2.0};
+        std::vector<float> sample = {1.0,2.0};
         fv.processSample(sample);
 
         expectEquals(fv.getSize(), 2, "Finger Vector Size");
-        expectEquals(fv.getChild("0")->getValue("x"), 1.0, "Finger Vector State Capture");
-        expectEquals(fv.getChild("1")->getValue("x"), 2.0, "Finger Vector State Capture");
+        expectEquals(fv.getChild("0")->getValue("x"), (float)1.0, "Finger Vector State Capture");
+        expectEquals(fv.getChild("1")->getValue("x"), (float)2.0, "Finger Vector State Capture");
         expect(vectorsAreEqual(fv.generateDecoderKey(),{"0/flex/x","1/flex/x"}), "Finger Vector Decoder");
     }
 
     void testHand() {
         Hand hand;
-        std::vector<double> sample = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0};
+        std::vector<float> sample = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0};
         hand.processSample(sample);
 
         expectEquals(hand.getSize(), 8, "Hand Size");
-        expectEquals(hand.getChild("gyro")->getValue("x"), 1.0, "Hand State Capture");
-        expectEquals(hand.getChild("gyro")->getValue("y"), 2.0, "Hand State Capture");
-        expectEquals(hand.getChild("gyro")->getValue("z"), 3.0, "Hand State Capture");
-        expectEquals(hand.getChild("accel")->getValue("x"), 4.0, "Hand State Capture");
-        expectEquals(hand.getChild("accel")->getValue("y"), 5.0, "Hand State Capture");
-        expectEquals(hand.getChild("accel")->getValue("z"), 6.0, "Hand State Capture");
-        expectEquals(hand.getChild("fv")->getChild("0")->getValue("x"), 7.0, "Hand State Capture");
-        expectEquals(hand.getChild("fv")->getChild("1")->getValue("x"), 8.0, "Hand State Capture");
+        expectEquals(hand.getChild("gyro")->getValue("x"), (float)1.0, "Hand State Capture");
+        expectEquals(hand.getChild("gyro")->getValue("y"), (float)2.0, "Hand State Capture");
+        expectEquals(hand.getChild("gyro")->getValue("z"), (float)3.0, "Hand State Capture");
+        expectEquals(hand.getChild("accel")->getValue("x"), (float)4.0, "Hand State Capture");
+        expectEquals(hand.getChild("accel")->getValue("y"), (float)5.0, "Hand State Capture");
+        expectEquals(hand.getChild("accel")->getValue("z"), (float)6.0, "Hand State Capture");
+        expectEquals(hand.getChild("fv")->getChild("0")->getValue("x"), (float)7.0, "Hand State Capture");
+        expectEquals(hand.getChild("fv")->getChild("1")->getValue("x"), (float)8.0, "Hand State Capture");
         expect(vectorsAreEqual(hand.generateDecoderKey(),
             {"gyro/x","gyro/y","gyro/z",
             "accel/x","accel/y","accel/z",
@@ -77,11 +77,11 @@ public:
 
     void testBody() {
         Body body;
-        std::vector<double> sample = {1.0};
+        std::vector<float> sample = {1.0};
         body.processSample(sample);
 
         expectEquals(body.getSize(), 1, "Body Size");
-        expectEquals(body.getChild("flex")->getValue("x"), 1.0, "Body State Capture");
+        expectEquals(body.getChild("flex")->getValue("x"), (float)1.0, "Body State Capture");
     }
 
 private:
@@ -102,4 +102,4 @@ static HumanWareTests humanWareTest;
 
 
         // std::string sample = "1,2,3,1,2,3,1,2";
-        // std::vector<double> sample = {1, 2, 3, 1, 2, 3, 1, 2};
+        // std::vector<float> sample = {1, 2, 3, 1, 2, 3, 1, 2};

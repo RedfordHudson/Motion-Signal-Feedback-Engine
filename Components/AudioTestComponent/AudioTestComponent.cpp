@@ -5,7 +5,7 @@
 #include <GraphVector.h>
 
 AudioTestComponent::AudioTestComponent()
-    : transport(std::make_unique<Transport>(160)),
+    : transport(std::make_unique<Transport>(40)),
     oscillator(std::make_unique<OscillatorWrapper>(300.f)),
     graphVector(std::make_unique<GraphVector>(2))
 {
@@ -35,7 +35,7 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
 
     auto [beatSampleIndex, phase, cycleBeatSampleIndex, cyclePhase] = transport->processBlock(bufferToFill);
 
-    oscillator->processBlock(buffer,beatSampleIndex);
+    oscillator->processBlock(buffer,cycleBeatSampleIndex);
 
     graphVector->pushSample({phase,cyclePhase});
 }

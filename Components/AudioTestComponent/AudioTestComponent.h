@@ -34,7 +34,7 @@ private:
     std::unique_ptr<Transport> transport;
     std::unique_ptr<Grapher> grapher;
 
-    // juce::dsp::Oscillator<float> oscillator;
+    juce::dsp::Oscillator<float> oscillator;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTestComponent)
 };

@@ -10,6 +10,8 @@
 // == [ mode: simulate ] ==
 #include <random>
 
+// Helper function for parsing serial data
+static std::vector<float> vectorizeString(const std::string& completeMsg);
 
 class SerialMonitor : public juce::Thread
 {

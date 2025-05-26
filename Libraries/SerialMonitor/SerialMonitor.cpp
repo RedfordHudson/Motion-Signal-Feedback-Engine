@@ -67,39 +67,48 @@ void SerialMonitor::setCallback(Callback callback)
 }
 
 void SerialMonitor::run() {
-
     while (!threadShouldExit()) {
-
         std::vector<float> sample;
 
-        if ( mode == "monitor" ) {
+        if (mode == "monitor") {
+            DWORD totalBytesRead = 0;
+            DWORD bytesRead = 0;
             
-            if (ReadFile(hSerial, buffer, sizeof(buffer) - 1, &bytesRead, nullptr)) {
-                sample = readSample();
-                if (!sample.empty()) {
-                    jassert(sample.size() == size);
-                    callback(sample);
+            // Read all available data in one go
+            if (ReadFile(hSerial, buffer, sizeof(buffer) - 1, &bytesRead, nullptr) && bytesRead > 0) {
+                buffer[bytesRead] = '\0';
+                accumulated += std::string(buffer, bytesRead);
+
+                // Process all complete messages in the buffer
+                size_t newlinePos;
+                while ((newlinePos = accumulated.find('\n')) != std::string::npos) {
+                    std::string completeMsg = accumulated.substr(0, newlinePos);
+                    accumulated.erase(0, newlinePos + 1);
+
+                    sample = vectorizeString(completeMsg);
+                    if (!sample.empty()) {
+                        jassert(sample.size() == size);
+                        callback(sample);
+                    }
                 }
-            } 
-            else {
+            } else {
                 std::cerr << "Failed to read from serial port.\n";
                 break;
             }
         }
-
-        else if ( mode == "simulate" ) {
+        else if (mode == "simulate") {
             sample = generateSample();
             jassert(sample.size() == size);
             callback(sample);
         }
 
-        wait(10); // Small delay to avoid overloading the CPU
+        wait(1); // Reduced delay for faster response
     }
 }
 
 // == [ mode: monitor ] ==
 
-const std::vector<float> vectorizeString(const std::string& completeMsg) {
+static std::vector<float> vectorizeString(const std::string& completeMsg) {
     std::vector<float> values;
     std::stringstream ss(completeMsg);
     std::string value;

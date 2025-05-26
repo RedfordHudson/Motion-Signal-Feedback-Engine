@@ -3,7 +3,7 @@
 SerialSimulator::SerialSimulator()
     : juce::Thread("SerialSimulator")
 {
-    startThread();
+    // startThread();
 }
 
 SerialSimulator::~SerialSimulator()
@@ -19,11 +19,18 @@ void SerialSimulator::setCallback(Callback callback)
 void SerialSimulator::run()
 {
     gen = std::mt19937(rd());
-    dis = std::uniform_real_distribution<>(-1.0, 1.0);
+    dis = std::uniform_real_distribution<>(0.0, 1.0);
 
     while (!threadShouldExit())
     {
         const std::vector<float> sample = generateSample();
+
+        if (!callback)
+        {
+            std::cout << "callback is undefined!" << std::endl;
+            break;
+        }
+
         callback(sample);
     }
 }

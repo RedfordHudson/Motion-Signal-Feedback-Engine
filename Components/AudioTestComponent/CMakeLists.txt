@@ -3,4 +3,6 @@ target_link_libraries(AudioTestComponent
         Transport
         OscillatorWrapper
         GraphVector
+        HumanWare
+        SerialSimulator
 )

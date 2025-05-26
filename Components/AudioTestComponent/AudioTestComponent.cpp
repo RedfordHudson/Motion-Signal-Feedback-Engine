@@ -1,18 +1,47 @@
 #include "AudioTestComponent.h"
 
+#include <SerialSimulator.h>
+#include <HumanWare.h>
 #include <Transport.h>
 #include <OscillatorWrapper.h>
 #include <GraphVector.h>
 
 AudioTestComponent::AudioTestComponent()
-    : transport(std::make_unique<Transport>(40)),
+    : 
+    serialSimulator(std::make_unique<SerialSimulator>()),
+    body(std::make_unique<Body>()),
+    transport(std::make_unique<Transport>(40)),
     oscillator(std::make_unique<OscillatorWrapper>(300.f)),
-    graphVector(std::make_unique<GraphVector>(2))
+    graphVector(std::make_unique<GraphVector>(3))
 {
     setSize(800, 600);
     setAudioChannels(0, 2); // 0 input channels, 2 output channels
 
     addAndMakeVisible(*graphVector);
+
+    flexValue = 0;
+    
+    onBodyUpdated = [this]() {
+        double proxyFlexValue;
+        {
+            // scoped lock
+            const juce::ScopedLock sl(bodyLock);
+            proxyFlexValue = body->getChild("flex")->getValue("x");
+        }
+        flexValue = proxyFlexValue;
+        // grapher->pushSample(flexValue);
+    };
+
+    // set callback for serial simulator
+    serialSimulator->setCallback([this](const std::vector<float> sample) {
+        // scoped lock
+        const juce::ScopedLock sl(bodyLock);
+        
+        body->processSample(sample);
+        onBodyUpdated();
+    });
+
+    serialSimulator->startThread();
 }
 
 AudioTestComponent::~AudioTestComponent() {
@@ -37,5 +66,6 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
 
     oscillator->processBlock(buffer,cycleBeatSampleIndex);
 
-    graphVector->pushSample({phase,cyclePhase});
+
+    graphVector->pushSample({flexValue,phase,cyclePhase});
 }

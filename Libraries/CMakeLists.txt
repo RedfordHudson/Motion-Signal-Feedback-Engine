@@ -1,7 +1,4 @@
-# add_subdirectory(SerialSimulator)
-# add_subdirectory(HumanWare)
-
-set(LIBS Transport OscillatorWrapper Cycle)
+set(LIBS Transport OscillatorWrapper Cycle SerialSimulator)
 
 function(add_juce_library TARGET_NAME)
 
@@ -30,3 +27,5 @@ endforeach()
 foreach(LIB ${LIBS})
     add_subdirectory(${LIB})
 endforeach()
+
+add_subdirectory(HumanWare)

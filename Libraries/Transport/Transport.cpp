@@ -21,7 +21,7 @@ void Transport::prepareToPlay(const float sampleRate) {
     // samples/beat = (samples/second) / (beats/second)
     SAMPLES_PER_BEAT = SAMPLE_RATE / beats_per_second; // = 18k
 
-    // cycle->prepareToPlay(SAMPLES_PER_BEAT);
+    cycle->prepareToPlay(SAMPLES_PER_BEAT);
 
     
     // std::cout << "sample rate: " << std::to_string(SAMPLE_RATE) 
@@ -30,9 +30,8 @@ void Transport::prepareToPlay(const float sampleRate) {
     //     << std::endl;
 }
 
-const std::tuple<int,float> Transport::processBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
-    const int buffer_size = bufferToFill.numSamples;
-    // buffer_size ~= 480
+const std::tuple<int,float,int,float> Transport::processBlock(const juce::AudioSourceChannelInfo& bufferToFill) {
+    const int buffer_size = bufferToFill.numSamples; // = 480
     
     samples_for_current_beat += buffer_size;
 
@@ -46,24 +45,24 @@ const std::tuple<int,float> Transport::processBlock(const juce::AudioSourceChann
 
     // beat starts in current buffer -> trigger beat
     if (beatSampleIndex < buffer_size) {
-    // if (samples_for_current_beat > static_cast<int>(SAMPLES_PER_BEAT)) {
         triggerBeat();
         samples_for_current_beat -= static_cast<int>(SAMPLES_PER_BEAT);
     }
 
     const float phase = samples_for_current_beat / SAMPLES_PER_BEAT;
 
-    // auto [cycleBeatSampleIndex, cyclePhase] = cycle->processBlock(bufferToFill);
+    auto [cycleBeatSampleIndex, cycleBeatCount] = cycle->processBlock(buffer_size);
 
-    return std::make_tuple(beatSampleIndex, phase);
-    // return std::make_tuple(beatSampleIndex, phase, cycleBeatSampleIndex, cyclePhase);
+    // return std::make_tuple(beatSampleIndex, phase);
+    return std::make_tuple(beatSampleIndex, phase, cycleBeatSampleIndex, cycleBeatCount);
 }
 
 void Transport::triggerBeat() {
     beat_count++;
 
+    // config
     if (beat_count % 2 == 0)
-        cycle->updatePattern({0,3});
+        cycle->updatePattern({0,4});
     else
         cycle->updatePattern({0,3,6});
     

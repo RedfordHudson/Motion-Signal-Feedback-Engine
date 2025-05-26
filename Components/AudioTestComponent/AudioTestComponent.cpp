@@ -33,7 +33,7 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
 
     juce::AudioBuffer<float>& buffer = *bufferToFill.buffer;
 
-    auto [beatSampleIndex, phase] = transport->processBlock(bufferToFill);
+    auto [beatSampleIndex, phase, cycleBeatSampleIndex, cyclePhase] = transport->processBlock(bufferToFill);
 
     oscillator->processBlock(buffer,beatSampleIndex);
 

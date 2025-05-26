@@ -10,18 +10,19 @@ public:
 
     void prepareToPlay(const float sampleRate);
 
-    const std::tuple<int,float> processBlock(const juce::AudioSourceChannelInfo& bufferToFill);
+    const std::tuple<int,float,int,float> processBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 
     void triggerBeat();
 
 protected:
     const int BASELINE_BPM;
-private:
-    int samples_for_current_beat;
-    int beat_count;
 
+private:
     float SAMPLE_RATE;
     float SAMPLES_PER_BEAT;
+
+    int samples_for_current_beat;
+    int beat_count;
 
     std::unique_ptr<Cycle> cycle;
 };

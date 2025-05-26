@@ -6,14 +6,21 @@ public:
     Cycle(int n);
     ~Cycle() {}
     
-    void prepareToPlay(const float sampleRate, const float parent_samples_per_beat);
+    void prepareToPlay(const float parent_samples_per_beat);
 
     void updatePattern(std::vector<int> newPattern);
     
-    const std::tuple<int,float> Cycle::processBlock(const juce::AudioSourceChannelInfo& bufferToFill);
+    std::tuple<int,float> Cycle::processBlock(const int buffer_size);
+
+    const bool onPattern();
 
 protected:
     int n;
+
 private:
     std::vector<int> pattern;
+    float SAMPLES_PER_BEAT;
+
+    int samples_for_current_beat;
+    int beat_count;
 };

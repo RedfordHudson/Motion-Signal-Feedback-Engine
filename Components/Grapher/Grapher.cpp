@@ -4,10 +4,6 @@
 Grapher::Grapher(const int width, const int height)
 {
     setSize(width, height);
-    
-    // Initialize with some random test data
-    
-    updateRange();
 }
 
 void Grapher::paint(juce::Graphics& g)
@@ -19,18 +15,8 @@ void Grapher::paint(juce::Graphics& g)
     g.setColour(juce::Colours::grey);
     g.drawRect(getLocalBounds(), 1);
 
-    // delimit critical section
-    {
-        // juce::ScopedLock lock(bufferLock);
-        snapshot = buffer;
-    }
-
-    if (snapshot.empty())
-    {
+    if (buffer.empty())
         return;
-    }
-
-    // updateRange(); 
     
     // Draw the waveform
     g.setColour(juce::Colours::white);
@@ -43,28 +29,6 @@ void Grapher::resized()
     repaint();
 }
 
-void Grapher::updateRange()
-{
-    if (snapshot.empty())
-    {
-        minValue = 0.0;
-        maxValue = 1.0;
-        return;
-    }
-    
-    for (const auto& value : snapshot)
-    {
-        minValue = std::min(minValue, value);
-        maxValue = std::max(maxValue, value);
-    }
-    
-    // Add a small margin to the range
-    float range = maxValue - minValue;
-    if (range == 0.0) range = 1.0;  // Prevent division by zero
-    minValue -= range * 0.1;
-    maxValue += range * 0.1;
-}
-
 float Grapher::valueToY(float value) const
 {
     // Convert value to y coordinate, scaled to min/max range
@@ -75,25 +39,22 @@ float Grapher::valueToY(float value) const
 
 float Grapher::indexToX(int index) const
 {
-    // Convert snapshot index to x coordinate
+    // Convert buffer index to x coordinate
     float width = getWidth() - 2 * margin;
-    return margin + index * width / (snapshot.size() - 1);
+    return margin + index * width / (buffer.size() - 1);
 }
 
 juce::Path Grapher::renderPlot()
 {
     juce::Path path;
     
-    if (snapshot.empty())
-        return path;
-
     // Start at first point
-    path.startNewSubPath(indexToX(0), valueToY(snapshot[0]));
+    path.startNewSubPath(indexToX(0), valueToY(buffer[0]));
 
     // Draw lines to subsequent points
-    for (size_t i = 1; i < snapshot.size(); ++i)
+    for (size_t i = 1; i < buffer.size(); ++i)
     {
-        path.lineTo(indexToX(i), valueToY(snapshot[i]));
+        path.lineTo(indexToX(i), valueToY(buffer[i]));
     }
 
     return path;
@@ -103,6 +64,10 @@ void Grapher::pushSample(const float sample)
 {
     // juce::ScopedLock lock(bufferLock);
     buffer.push_back(sample);
+
+    // update range
+    minValue = std::min(minValue, sample);
+    maxValue = std::max(maxValue, sample);
     
     // Clamp buffer size to windowSize
     if (buffer.size() > windowSize)

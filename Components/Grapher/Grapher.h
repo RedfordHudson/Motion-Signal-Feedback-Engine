@@ -20,13 +20,9 @@ private:
     // Convert buffer index to x coordinate
     float indexToX(int index) const;
 
-    // Update min/max values from buffer
-    void updateRange();
-
     juce::Path renderPlot();
 
     std::vector<float> buffer;
-    std::vector<float> snapshot;;
     float margin = 20.0f;  // Margin around the plot
     
     // Track min/max values for scaling

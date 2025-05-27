@@ -28,7 +28,10 @@ public:
     }
 
     void processSample(const std::vector<float>& sample) override {
-        jassert(sample.size() == getSize());
+        if (sample.size() != getSize()) {
+            std::cout << "HumanWareNodeVector: incorrect sample size" << std::endl;
+            return;
+        }
 
         int i = 0;
         for (const auto& [child_name, child] : children) {
@@ -107,9 +110,11 @@ public:
     }
 
     void processSample(const std::vector<float>& sample) override {
-        jassert(sample.size() == getSize());
-        // jassert(sample.size() == static_cast<size_t>(getSize()));
-
+        if (sample.size() != getSize()) {
+            std::cout << "HumanWareNodeVector: incorrect sample size" << std::endl;
+            return;
+        }
+        
         for (int i = 0; i < num_children; ++i) {
             auto begin = sample.begin() + i * keys_per_child;
             auto end = begin + keys_per_child;

@@ -12,6 +12,7 @@ class Body;
 class Transport;
 class OscillatorWrapper;
 class GraphVector;
+struct GraphMeta;
 
 class AudioTestComponent : public juce::AudioAppComponent
 {
@@ -39,6 +40,8 @@ private:
     std::unique_ptr<Transport> transport;
     std::unique_ptr<OscillatorWrapper> oscillator;
     std::unique_ptr<GraphVector> graphVector;
+
+    const std::vector<GraphMeta>& graphMeta;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTestComponent)
 };

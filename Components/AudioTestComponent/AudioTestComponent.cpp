@@ -11,11 +11,21 @@ AudioTestComponent::AudioTestComponent()
     serialMonitor(std::make_unique<SerialMonitor>("monitor",6)),
     body(std::make_unique<Body>()),
     transport(std::make_unique<Transport>(40)),
-    oscillator(std::make_unique<OscillatorWrapper>(300.f)),
-    graphVector(std::make_unique<GraphVector>(3))
+    oscillator(std::make_unique<OscillatorWrapper>(300.f))
 {
     setSize(800, 600);
     setAudioChannels(0, 2); // 0 input channels, 2 output channels
+
+
+    const std::vector<GraphMeta> meta = {
+        {"accel", "spatial", {"x", "y", "z"}},
+        {"gyro", "spatial", {"x", "y", "z"}},
+        {"transport", "rhythmic", {"phase", "cyclePhase"}}
+    };
+
+    GraphMetaVector graphMetaVector(meta);
+    
+    graphVector = std::make_unique<GraphVector>(graphMetaVector);
 
     addAndMakeVisible(*graphVector);
 

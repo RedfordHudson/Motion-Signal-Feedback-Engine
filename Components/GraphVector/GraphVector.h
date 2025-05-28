@@ -3,21 +3,12 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 class Grapher;
-
-class GraphMetaVector {
-    const std::vector<GraphMeta>& graphMeta;
-
-public:
-    GraphMetaVector(const std::vector<GraphMeta>& meta)
-        : graphMeta(meta)  // bind reference here
-    {}
-};
-
+class GraphMeta;
 
 class GraphVector : public juce::Component
 {
 public:
-    GraphVector::GraphVector(const GraphMetaVector& metaData);
+    GraphVector::GraphVector(const std::vector<GraphMeta>& meta);
 
     void paint(juce::Graphics& g) override;
     void resized() override;

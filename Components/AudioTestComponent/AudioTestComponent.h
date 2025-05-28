@@ -12,7 +12,21 @@ class Body;
 class Transport;
 class OscillatorWrapper;
 class GraphVector;
-struct GraphMeta;
+
+class GraphMeta {
+
+// remains immutable and encapsulated unless explicitly accessed by the intended consumer
+friend class Grapher; 
+
+public:
+    GraphMeta(std::string name, std::string type, std::vector<std::string> fields)
+        : name(std::move(name)), type(std::move(type)), fields(std::move(fields)) {}
+    ~GraphMeta() {}
+private:
+    std::string name;
+    std::string type;
+    std::vector<std::string> fields;
+};
 
 class AudioTestComponent : public juce::AudioAppComponent
 {
@@ -40,8 +54,6 @@ private:
     std::unique_ptr<Transport> transport;
     std::unique_ptr<OscillatorWrapper> oscillator;
     std::unique_ptr<GraphVector> graphVector;
-
-    const std::vector<GraphMeta>& graphMeta;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTestComponent)
 };

@@ -3,14 +3,14 @@
 
 #include <Grapher.h>
 
-GraphVector::GraphVector(const GraphMetaVector& graphMetaVector)
-    : size(graphMetaVector.graphMeta.size())
+GraphVector::GraphVector(const std::vector<GraphMeta>& meta)
+    : size(meta.size())
 {
     const int width = 800;
     const int height = 600;
 
     for (int i = 0; i < size; i++) {
-        graphs.push_back(std::make_unique<Grapher>(graphMetaVector.graphMeta[i],width,height/size));
+        graphs.push_back(std::make_unique<Grapher>(std::move(GraphMeta(meta[i])), width, height/size));
     }
     
     setSize(width, height);
@@ -43,6 +43,7 @@ void GraphVector::resized()
 }
 
 void GraphVector::pushSample(const std::vector<std::vector<float>> sample) {
+
     if (sample.size() != size) {
         std::cout << "GraphVector: incorrect sample size" << std::endl;
         return;

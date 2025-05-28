@@ -67,6 +67,16 @@ public:
         return empty_state; 
     }
 
+    virtual const std::vector<float>& vectorizeState() const override {
+        static std::vector<float> result;
+        result.clear();
+        for (const auto& [child_name, child] : children) {
+            const auto& child_state = child->vectorizeState();
+            result.insert(result.end(), child_state.begin(), child_state.end());
+        }
+        return result;
+    }
+
 private:
     std::vector<std::pair<std::string, std::shared_ptr<WareNode>>> children;
 };
@@ -142,6 +152,16 @@ public:
 
     const float getValue(const std::string& key) const override { return -1; }
 
+    virtual const std::vector<float>& vectorizeState() const override {
+        static std::vector<float> result;
+        result.clear();
+        for (const auto& child : children) {
+            const auto& child_state = child->vectorizeState();
+            result.insert(result.end(), child_state.begin(), child_state.end());
+        }
+        return result;
+    }
+    
 protected:
     int num_children;
 private:

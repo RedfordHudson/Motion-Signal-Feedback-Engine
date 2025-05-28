@@ -18,7 +18,7 @@ public:
     // only used in SensorWareNodes
     virtual const float getValue(const std::string& key) const = 0;
     virtual const juce::NamedValueSet& getState() const = 0;
-
+    virtual const std::vector<float>& vectorizeState() const = 0;
 
     // only used in HumanWareNodes
     virtual std::shared_ptr<WareNode> getChild(const std::string& name) const = 0;
@@ -53,6 +53,15 @@ public:
     const float getValue(const std::string& key) const override {
         jassert(std::find(getKeys().begin(), getKeys().end(), key) != getKeys().end());
         return static_cast<float>(state[juce::Identifier(key)]);
+    }
+
+    virtual const std::vector<float>& vectorizeState() const override {
+        static std::vector<float> result;
+        result.clear();
+        for (const auto& key : getKeys()) {
+            result.push_back(getValue(key));
+        }
+        return result;
     }
 
     const int getSize() const override {

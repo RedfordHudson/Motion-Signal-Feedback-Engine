@@ -8,7 +8,7 @@
 
 AudioTestComponent::AudioTestComponent()
     : 
-    serialMonitor(std::make_unique<SerialMonitor>("monitor",6)),
+    serialMonitor(std::make_unique<SerialMonitor>("simulate",6)),
     body(std::make_unique<Body>()),
     transport(std::make_unique<Transport>(40)),
     oscillator(std::make_unique<OscillatorWrapper>(300.f))
@@ -16,23 +16,22 @@ AudioTestComponent::AudioTestComponent()
     setSize(800, 600);
     setAudioChannels(0, 2); // 0 input channels, 2 output channels
 
+    {
+        // temporary lifetime -> should "own" data (don't make reference&)
+        const std::vector<GraphMeta> meta = {
+            GraphMeta("accel", "sensor", {"x", "y", "z"}),
+            GraphMeta("gyro", "sensor", {"x", "y", "z"}),
+            GraphMeta("transport", "rhythmic", {"phase", "cyclePhase"})
+        };
 
-    const std::vector<GraphMeta> meta = {
-        {"accel", "spatial", {"x", "y", "z"}},
-        {"gyro", "spatial", {"x", "y", "z"}},
-        {"transport", "rhythmic", {"phase", "cyclePhase"}}
-    };
-
-    GraphMetaVector graphMetaVector(meta);
-    
-    graphVector = std::make_unique<GraphVector>(graphMetaVector);
+        graphVector = std::make_unique<GraphVector>(meta);
+    }
 
     addAndMakeVisible(*graphVector);
 
     serialMonitor->setCallback([this](const std::vector<float> sample) {
         juce::MessageManager::callAsync([this, sample] {
             body->processSample(sample);
-
         });
     });
 
@@ -61,7 +60,13 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
 
     oscillator->processBlock(buffer,cycleBeatSampleIndex);
 
-    const float x = body->getChild("hand")->getChild("accel")->getValue("x");
+    const std::vector<std::vector<float>> sample = {
+        body->getChild("hand")->getChild("accel")->vectorizeState(),
+        body->getChild("hand")->getChild("gyro")->vectorizeState(),
+        // {1.0,2.0,3.0},
+        // {1.0,2.0,3.0},
+        {phase,cyclePhase}
+    };
 
-    graphVector->pushSample({x,phase,cyclePhase});
+    graphVector->pushSample(sample);
 }

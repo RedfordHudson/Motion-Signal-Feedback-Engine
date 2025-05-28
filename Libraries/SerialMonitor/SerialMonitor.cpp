@@ -72,39 +72,43 @@ void SerialMonitor::setCallback(Callback callback)
 }
 
 void SerialMonitor::run() {
-    while (!threadShouldExit()) {
-        
-        char buffer[256];
-        DWORD bytesRead;
+    if (mode == "monitor") {
+        readSerialData();
+    } else if (mode == "simulate") {
+        while (!threadShouldExit()) {
+            guardedCallback(generateSample());
+            wait(10);
+        }
+    }
+}
 
-        if (mode == "monitor") {
-            // DWORD bytesRead = 0;
-            
-            // Read all available data in one go
-            if (ReadFile(hSerial, buffer, sizeof(buffer) - 1, &bytesRead, nullptr) && bytesRead > 0) {
+void SerialMonitor::readSerialData() {
+    char buffer[1024];
+    DWORD bytesRead;
+
+    while (!threadShouldExit()) {
+        COMSTAT status;
+        DWORD errors;
+        ClearCommError(hSerial, &errors, &status);
+
+        if (status.cbInQue > 0) {
+            DWORD toRead = min(status.cbInQue, sizeof(buffer) - 1);
+            if (ReadFile(hSerial, buffer, toRead, &bytesRead, nullptr) && bytesRead > 0) {
                 buffer[bytesRead] = '\0';
                 accumulated += std::string(buffer, bytesRead);
 
-                // Process all complete messages in the buffer
                 size_t newlinePos;
                 while ((newlinePos = accumulated.find('\n')) != std::string::npos) {
                     std::string completeMsg = accumulated.substr(0, newlinePos);
                     accumulated.erase(0, newlinePos + 1);
 
-                    const std::vector<float> sample = vectorizeString(completeMsg);
+                    const auto sample = vectorizeString(completeMsg);
                     guardedCallback(sample);
                 }
-            } else {
-                std::cerr << "Failed to read from serial port.\n";
-                break;
             }
+        } else {
+            juce::Thread::sleep(1); // nothing to read
         }
-        else if (mode == "simulate") {
-            guardedCallback(generateSample());
-            wait(10);
-        }
-
-        wait(1); // Reduced delay for faster response
     }
 }
 

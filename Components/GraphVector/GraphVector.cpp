@@ -44,21 +44,11 @@ void GraphVector::resized()
 
 void GraphVector::pushSample(const std::vector<std::vector<float>> sample) {
 
-    // std::cout << "0" << std::endl;
-
-    // std::cout << "this->size = " << this->size 
-    //       << ", address: " << &(this->size) << std::endl;
-
-
     if (sample.size() != size) {
         std::cout << "GraphVector: incorrect sample size |";
         return;
     }
 
-    // std::cout << "1" << std::endl;
-
     for (int i = 0; i < size; i++)
         graphs[i]->pushSample(sample[i]);
-
-    // std::cout << "2" << std::endl;
 }

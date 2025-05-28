@@ -63,12 +63,7 @@ void Grapher::generateLegend(const int fieldIndex, const juce::Colour& color) {
     legendLabel->setColour(juce::Label::textColourId, color);
     legendLabel->setColour(juce::Label::backgroundColourId, juce::Colours::black);
 
-    
-    std::cout << "this->type = " << this->type 
-          << ", address: " << &(this->type) << std::endl;
-
     legendLabel->setColour(juce::Label::outlineColourId, getBorderColor());
-    // legendLabel->setColour(juce::Label::outlineColourId, juce::Colours::white);
     legendLabel->setFont(juce::Font(14.0f));
     legendLabel->setJustificationType(juce::Justification::centredLeft);
 

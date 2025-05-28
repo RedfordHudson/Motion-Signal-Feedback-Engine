@@ -40,7 +40,7 @@ private:
     bool openPort(const std::string& portName);
     void closePort();
 
-    // const std::vector<float> readSample();
+    void readSerialData();
 
     HANDLE hSerial = INVALID_HANDLE_VALUE;
     // char buffer[256];

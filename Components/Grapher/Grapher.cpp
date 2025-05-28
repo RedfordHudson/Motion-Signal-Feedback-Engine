@@ -103,7 +103,6 @@ const juce::Colour& Grapher::getPathColor(const int fieldIndex) const {
 
 // == [ plot ] ==
 
-/*
 float Grapher::valueToY(float value) const
 {
     // Convert value to y coordinate, scaled to min/max range
@@ -114,15 +113,13 @@ float Grapher::valueToY(float value) const
 
 float Grapher::indexToX(int index) const
 {
-    // Convert buffer index to x coordinate
-    float width = getWidth() - 2 * margin;
-    return margin + index * width / (windowSize - 1);
+    return index * getWidth() / (windowSize - 1);
 }
 
 void Grapher::renderPlot(juce::Graphics& g, const int fieldIndex)
 {
     juce::Path path;
-
+    
     int start_index = 0;
     if (windowSize > cur_length)
         start_index = windowSize - cur_length;
@@ -131,52 +128,13 @@ void Grapher::renderPlot(juce::Graphics& g, const int fieldIndex)
     path.startNewSubPath(indexToX(start_index), valueToY(buffers[fieldIndex][0]));
 
     // Draw lines to subsequent points
-    for (size_t i = start_index + 1; i < cur_length; ++i)
-    {
-        path.lineTo(indexToX(i), valueToY(buffers[fieldIndex][i]));
-    }
-
-    g.strokePath(path, juce::PathStrokeType(2.0f));
-
-}
-*/
-
-
-
-float Grapher::valueToY(float value) const
-{
-    // Convert value to y coordinate, scaled to min/max range
-    float height = getHeight() - 2 * margin;
-    float normalizedValue = (value - minValue) / (maxValue - minValue);
-    return getHeight() - margin - normalizedValue * height;
-}
-
-float Grapher::indexToX(int index) const
-{
-    // Convert buffer index to x coordinate
-    float width = getWidth() - 2 * margin;
-    return margin + index * width / (cur_length - 1);
-}
-
-void Grapher::renderPlot(juce::Graphics& g, const int fieldIndex)
-{
-    juce::Path path;
-    
-    // Start at first point
-    path.startNewSubPath(indexToX(0), valueToY(buffers[fieldIndex][0]));
-
-    // Draw lines to subsequent points
     for (size_t i = 1; i < cur_length; ++i)
     {
-        path.lineTo(indexToX(i), valueToY(buffers[fieldIndex][i]));
+        path.lineTo(indexToX(start_index + i), valueToY(buffers[fieldIndex][i]));
     }
 
     g.strokePath(path, juce::PathStrokeType(2.0f));
 }
-
-
-
-
 
 // == [ label ] ==
 

@@ -81,5 +81,6 @@ private:
 
     std::vector<std::unique_ptr<juce::Label>> legendComponents;
     void generateLegend(const int fieldIndex, const juce::Colour& color);
+    void initializeLegend();  // New method to handle legend initialization
 
 };

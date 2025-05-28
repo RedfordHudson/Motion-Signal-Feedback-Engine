@@ -15,9 +15,16 @@ Grapher::Grapher(
     type(std::move(meta.type)),
     fields(std::move(meta.fields)),
     size(fields.size()),
-    buffers(size)  // initialize with size empty vectors
+    buffers(size),  // initialize with size empty vectors
+    legendComponents(0)
 {
     setSize(width, height);
+    
+    // generate legend
+    for (int i = 0; i < size; i++) {
+        const juce::Colour& color = getPathColor(i);
+        generateLegend(i,color);
+    }
 }
 
 void Grapher::paint(juce::Graphics& g)
@@ -37,7 +44,6 @@ void Grapher::paint(juce::Graphics& g)
         const juce::Colour& color = getPathColor(i);
         g.setColour(color);
         renderPlot(g,i);
-        // generateLegend(i,color);
     }
 }
 
@@ -144,11 +150,23 @@ void Grapher::generateLegend(const int fieldIndex, const juce::Colour& color) {
     auto legendLabel = std::make_unique<juce::Label>();
     legendLabel->setText(field, juce::dontSendNotification);
     legendLabel->setColour(juce::Label::textColourId, color);
+    legendLabel->setColour(juce::Label::backgroundColourId, juce::Colours::black);
+    // legendLabel->setColour(juce::Label::outlineColourId, getBorderColor());
+    legendLabel->setColour(juce::Label::outlineColourId, juce::Colours::white);
     legendLabel->setFont(juce::Font(14.0f));
     legendLabel->setJustificationType(juce::Justification::centredLeft);
 
+    // Calculate width based on text size
+    int maxWidth = 100;
+    // for (const auto& f : fields) {
+    //     int width = juce::Font(14.0f).getStringWidth(f);
+    //     maxWidth = std::max(maxWidth, width);
+    // }
+    // Add padding for the border and some extra space
+    maxWidth += 20;
+
     // Position the label dynamically (stacking them below each other, e.g.)
-    legendLabel->setBounds(10, 20 + fieldIndex * 20, 150, 20);
+    legendLabel->setBounds(10, 20 + fieldIndex * 20, maxWidth, 20);
 
     addAndMakeVisible(*legendLabel);
     legendComponents.push_back(std::move(legendLabel)); // Store for lifecycle

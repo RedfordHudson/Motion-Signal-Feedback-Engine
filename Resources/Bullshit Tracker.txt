@@ -23,3 +23,7 @@ CMake treats that as if you're linking directly to juce::juce_gui_basics. And be
 == [ crashing ] ==
 
 If it crashes mid-run, it's probably HumanWare receiving incorrectly sized samples.
+
+== [ exit code: -1073741819 ] ==
+
+member variable is undefined

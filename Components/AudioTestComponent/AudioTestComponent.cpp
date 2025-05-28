@@ -8,24 +8,19 @@
 
 AudioTestComponent::AudioTestComponent()
     : 
-    serialMonitor(std::make_unique<SerialMonitor>("simulate",6)),
+    serialMonitor(std::make_unique<SerialMonitor>("monitor",6)),
     body(std::make_unique<Body>()),
     transport(std::make_unique<Transport>(40)),
-    oscillator(std::make_unique<OscillatorWrapper>(300.f))
+    oscillator(std::make_unique<OscillatorWrapper>(300.f)),
+    meta({
+        GraphMeta("accel", "sensor", {"x", "y", "z"}),
+        GraphMeta("gyro", "sensor", {"x", "y", "z"}),
+        GraphMeta("transport", "rhythmic", {"phase", "cyclePhase"})
+    }),
+    graphVector(std::make_unique<GraphVector>(meta))
 {
     setSize(800, 600);
     setAudioChannels(0, 2); // 0 input channels, 2 output channels
-
-    {
-        // temporary lifetime -> should "own" data (don't make reference&)
-        const std::vector<GraphMeta> meta = {
-            GraphMeta("accel", "sensor", {"x", "y", "z"}),
-            GraphMeta("gyro", "sensor", {"x", "y", "z"}),
-            GraphMeta("transport", "rhythmic", {"phase", "cyclePhase"})
-        };
-
-        graphVector = std::make_unique<GraphVector>(meta);
-    }
 
     addAndMakeVisible(*graphVector);
 

@@ -3,13 +3,7 @@
 SerialMonitor::SerialMonitor(const std::string mode, const int size)
     : mode(mode), size(size),
     Thread("Serial Monitor")
-{
-    
-    if (mode == "simulate") {
-        gen = std::mt19937(rd());
-        dis = std::uniform_real_distribution<>(0.0, 1.0);
-    }
-}
+{}
 
 SerialMonitor::~SerialMonitor() {
     stopThread(1000);
@@ -22,7 +16,6 @@ void SerialMonitor::start() {
         return;
     startThread();
 }
-
 
 bool SerialMonitor::openPort(const std::string& portName) {
     hSerial = CreateFileA(portName.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0);
@@ -61,6 +54,18 @@ void SerialMonitor::closePort() {
     }
 }
 
+void SerialMonitor::guardedCallback(const std::vector<float> sample) {
+    if(sample.size() != size) {
+        std::cout << "SerialMonitor: incorrectly sized samples: " << std::to_string(size) << " =/= " << std::to_string(sample.size()) << " | ";
+        for(const auto& value : sample) {
+            std::cout << value << ",";
+        }
+        std::cout << std::endl;
+    }
+    else
+        callback(sample);
+}
+
 void SerialMonitor::setCallback(Callback callback)
 {
     this->callback = callback;
@@ -68,11 +73,12 @@ void SerialMonitor::setCallback(Callback callback)
 
 void SerialMonitor::run() {
     while (!threadShouldExit()) {
-        std::vector<float> sample;
+        
+        char buffer[256];
+        DWORD bytesRead;
 
         if (mode == "monitor") {
-            DWORD totalBytesRead = 0;
-            DWORD bytesRead = 0;
+            // DWORD bytesRead = 0;
             
             // Read all available data in one go
             if (ReadFile(hSerial, buffer, sizeof(buffer) - 1, &bytesRead, nullptr) && bytesRead > 0) {
@@ -85,11 +91,8 @@ void SerialMonitor::run() {
                     std::string completeMsg = accumulated.substr(0, newlinePos);
                     accumulated.erase(0, newlinePos + 1);
 
-                    sample = vectorizeString(completeMsg);
-                    if (!sample.empty()) {
-                        jassert(sample.size() == size);
-                        callback(sample);
-                    }
+                    const std::vector<float> sample = vectorizeString(completeMsg);
+                    guardedCallback(sample);
                 }
             } else {
                 std::cerr << "Failed to read from serial port.\n";
@@ -97,9 +100,8 @@ void SerialMonitor::run() {
             }
         }
         else if (mode == "simulate") {
-            sample = generateSample();
-            jassert(sample.size() == size);
-            callback(sample);
+            guardedCallback(generateSample());
+            wait(10);
         }
 
         wait(1); // Reduced delay for faster response
@@ -122,22 +124,6 @@ static std::vector<float> vectorizeString(const std::string& completeMsg) {
     }
     
     return values;
-}
-
-const std::vector<float> SerialMonitor::readSample() {
-    buffer[bytesRead] = '\0';
-    accumulated += std::string(buffer, bytesRead);
-
-    size_t newlinePos = accumulated.find('\n');
-    if (newlinePos != std::string::npos) {
-        std::string completeMsg = accumulated.substr(0, newlinePos + 1);
-        accumulated.erase(0, newlinePos + 1);
-
-        return vectorizeString(completeMsg);
-    }
-
-    // No complete message yet, return an empty vector
-    return {};
 }
 
 

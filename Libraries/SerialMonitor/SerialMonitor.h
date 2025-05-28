@@ -32,18 +32,19 @@ protected:
 private:
     Callback callback;
 
-    void run() override;  // Override run to implement the read loop
+    void run() override;
+    void SerialMonitor::guardedCallback(const std::vector<float> sample);
 
     // == [ mode: monitor ] ==
 
     bool openPort(const std::string& portName);
     void closePort();
 
-    const std::vector<float> readSample();
+    // const std::vector<float> readSample();
 
     HANDLE hSerial = INVALID_HANDLE_VALUE;
-    char buffer[256];
-    DWORD bytesRead;
+    // char buffer[256];
+    // DWORD bytesRead;
     std::string accumulated;
 
     // == [ mode: simulate ] ==

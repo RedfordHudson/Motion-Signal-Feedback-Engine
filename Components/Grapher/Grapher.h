@@ -26,7 +26,7 @@ class Grapher : public juce::Component
 {
 public:
     Grapher(
-        GraphMeta&& metaData,
+        const GraphMeta& metaData,
         const int width, 
         const int height);
 
@@ -43,6 +43,12 @@ protected:
     const int size;
 
 private:
+
+    // == [ legend ] ==
+
+    std::vector<std::unique_ptr<juce::Label>> legendComponents;
+    void generateLegend(const int fieldIndex, const juce::Colour& color);
+    void initializeLegend();  // New method to handle legend initialization
 
     // == [ store ] ==    
 
@@ -76,11 +82,5 @@ private:
     float valueToY(float value) const;
     float indexToX(int index) const;
     void renderPlot(juce::Graphics& g, const int fieldIndex);
-
-    // == [ label ] ==
-
-    std::vector<std::unique_ptr<juce::Label>> legendComponents;
-    void generateLegend(const int fieldIndex, const juce::Colour& color);
-    void initializeLegend();  // New method to handle legend initialization
 
 };

@@ -53,6 +53,8 @@ private:
     std::unique_ptr<Body> body;
     std::unique_ptr<Transport> transport;
     std::unique_ptr<OscillatorWrapper> oscillator;
+
+    const std::vector<GraphMeta> meta;
     std::unique_ptr<GraphVector> graphVector;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTestComponent)

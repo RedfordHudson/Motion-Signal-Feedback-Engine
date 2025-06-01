@@ -67,4 +67,10 @@ void Transport::triggerBeat() {
         cycle->updatePattern({0,3,6});
     
     // std::cout << "beat: " << std::to_string(beat_count) << std::endl;
+
+    cycle->resetBeatCount();
+}
+
+void Transport::modulateN(const int n) {
+    cycle->modulateN(n);
 }

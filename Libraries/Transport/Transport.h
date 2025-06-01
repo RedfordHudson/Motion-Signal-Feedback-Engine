@@ -14,6 +14,8 @@ public:
 
     void triggerBeat();
 
+    void modulateN(const int n);
+
 protected:
     const int BASELINE_BPM;
 

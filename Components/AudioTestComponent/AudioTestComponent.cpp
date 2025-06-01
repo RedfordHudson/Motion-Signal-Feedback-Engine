@@ -5,6 +5,7 @@
 #include <Transport.h>
 #include <OscillatorWrapper.h>
 #include <GraphVector.h>
+#include <algorithm>
 
 AudioTestComponent::AudioTestComponent()
     : 
@@ -15,7 +16,8 @@ AudioTestComponent::AudioTestComponent()
     meta({
         GraphMeta("accel", "sensor", {"x", "y", "z"}),
         GraphMeta("gyro", "sensor", {"x", "y", "z"}),
-        GraphMeta("transport", "rhythmic", {"phase", "cyclePhase"})
+        GraphMeta("transport", "rhythmic", {"phase", "cyclePhase"}),
+        GraphMeta("parameter", "parameter", {"gyro_y","n"})
     }),
     graphVector(std::make_unique<GraphVector>(meta))
 {
@@ -55,12 +57,17 @@ void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& b
 
     oscillator->processBlock(buffer,cycleBeatSampleIndex);
 
+    const float gyro_y = body->getChild("hand")->getChild("gyro")->getValue("y") / 17000 * 10;
+    int n = static_cast<int>(gyro_y);
+    if (n < 0) n = 0;
+    ++n;
+    transport->modulateN(n);
+
     const std::vector<std::vector<float>> sample = {
         body->getChild("hand")->getChild("accel")->vectorizeState(),
         body->getChild("hand")->getChild("gyro")->vectorizeState(),
-        // {1.0,2.0,3.0},
-        // {1.0,2.0,3.0},
-        {phase,cyclePhase}
+        {phase,cyclePhase},
+        {gyro_y,static_cast<float>(n)}
     };
 
     graphVector->pushSample(sample);

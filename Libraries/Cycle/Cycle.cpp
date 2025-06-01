@@ -8,6 +8,7 @@ Cycle::Cycle(int n)
 }
 
 void Cycle::prepareToPlay(const float parent_samples_per_beat) {
+    this->PARENT_SAMPLES_PER_BEAT = parent_samples_per_beat;
     SAMPLES_PER_BEAT = parent_samples_per_beat / n;
 }
 
@@ -30,7 +31,7 @@ std::tuple<int,float> Cycle::processBlock(const int buffer_size) {
         triggerBeat = onPattern();
         beat_count++;
 
-        if (beat_count == n)
+        if (beat_count >= n)
             beat_count = 0;
     }
 
@@ -46,5 +47,15 @@ std::tuple<int,float> Cycle::processBlock(const int buffer_size) {
 
 const bool Cycle::onPattern() {
     // return (beat_count in pattern)
-    return std::find(pattern.begin(), pattern.end(), beat_count) != pattern.end();
+    return true;
+    // return std::find(pattern.begin(), pattern.end(), beat_count) != pattern.end();
+}
+
+void Cycle::modulateN(const int n) {
+    this->n = n;
+    SAMPLES_PER_BEAT = PARENT_SAMPLES_PER_BEAT / n;
+}
+
+void Cycle::resetBeatCount() {
+    beat_count = 0;
 }

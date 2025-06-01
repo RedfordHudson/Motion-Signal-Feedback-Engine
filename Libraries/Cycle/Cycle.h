@@ -14,11 +14,16 @@ public:
 
     const bool onPattern();
 
+    void modulateN(const int n);
+
+    void resetBeatCount();
+
 protected:
     int n;
 
 private:
     std::vector<int> pattern;
+    float PARENT_SAMPLES_PER_BEAT;
     float SAMPLES_PER_BEAT;
 
     int samples_for_current_beat;

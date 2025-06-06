@@ -15,7 +15,7 @@ function(add_juce_library TARGET_NAME)
 
     target_link_libraries(${TARGET_NAME}
         PRIVATE
-            JUCEInterface
+            JUCE_USAGE_REQUIREMENTS
     )
 endfunction()
 

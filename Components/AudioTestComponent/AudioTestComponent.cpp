@@ -9,7 +9,7 @@
 
 AudioTestComponent::AudioTestComponent()
     : 
-    serialMonitor(std::make_unique<SerialMonitor>("monitor",6)),
+    serialMonitor(std::make_unique<SerialMonitor>("simulate",6)),
     body(std::make_unique<Body>()),
     transport(std::make_unique<Transport>(40)),
     oscillator(std::make_unique<OscillatorWrapper>(300.f)),
@@ -43,7 +43,7 @@ void AudioTestComponent::prepareToPlay(int samplesPerBlockExpected, double sampl
 {
     oscillator->prepareToPlay(samplesPerBlockExpected,sampleRate);
 
-    transport->prepareToPlay(sampleRate);
+    transport->prepareToPlay((float)sampleRate);
 }
 
 void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)

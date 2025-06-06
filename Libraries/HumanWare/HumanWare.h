@@ -151,6 +151,10 @@ public:
     }
 
     const float getValue(const std::string& key) const override { return -1; }
+    const juce::NamedValueSet& getState() const override { 
+        static const juce::NamedValueSet empty_state;
+        return empty_state; 
+    }
 
     virtual const std::vector<float>& vectorizeState() const override {
         static std::vector<float> result;

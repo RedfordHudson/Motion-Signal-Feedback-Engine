@@ -1,30 +1,12 @@
-add_library(HumanWare
-    SensorWare.h
-    HumanWare.h
-)
+# INTERFACE b/c only .h files
+add_library(HumanWare INTERFACE)
 
 target_include_directories(HumanWare
-    PUBLIC
+    INTERFACE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(HumanWare
-    PRIVATE
-        JUCEInterface
-)
-
-add_library(HumanWareTests
-    HumanWareTests.h
-)
-
-target_include_directories(HumanWareTests
-    PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-target_link_libraries(HumanWareTests
-    PRIVATE
-        JUCEInterface
-    PUBLIC
-        HumanWare
+    INTERFACE
+        JUCE_USAGE_REQUIREMENTS
 )

@@ -14,14 +14,6 @@ juce_generate_juce_header(${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    # explicitly links those modules into the final executable
-    # necessary b/c they have external dependencies
-        juce::juce_audio_utils
-        juce::juce_gui_extra # if omitted, will cause linker error
-        # TestComponent
+        ${JUCE_MODULES}
         AudioTestComponent
-    PUBLIC
-        juce::juce_recommended_config_flags
-        juce::juce_recommended_lto_flags
-        juce::juce_recommended_warning_flags
 )

@@ -20,13 +20,13 @@ function(add_juce_library TARGET_NAME)
 endfunction()
 
 
-foreach(LIB ${LIBS})
-    add_juce_library(${LIB})
-endforeach()
+# foreach(LIB ${LIBS})
+#     add_juce_library(${LIB})
+# endforeach()
 
 
-foreach(LIB ${LIBS})
-    add_subdirectory(${LIB})
-endforeach()
+# foreach(LIB ${LIBS})
+#     add_subdirectory(${LIB})
+# endforeach()
 
 add_subdirectory(HumanWare)

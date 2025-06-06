@@ -4,27 +4,46 @@ project(SynthEngine
     LANGUAGES CXX
 )
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)   # optional, prefer standard C++
+
+
+# configure_file(
+#     ${CMAKE_SOURCE_DIR}/JUCEConfig/juce_user_config.h
+#     ${CMAKE_BINARY_DIR}/generated/JuceUserConfig/juce_user_config.h
+#     @ONLY
+# )
+
+
+
+set(JUCE_MODULES_ONLY ON CACHE BOOL "" FORCE)
+
 add_subdirectory(JUCE)
+set(JUCE_MODULES
+    juce::juce_core
+    # juce_audio_basics
+    # juce_audio_devices
+    # juce_audio_utils
+    # juce_audio_formats
+    # juce_gui_basics
+    # juce_gui_extra
+    # juce_dsp
+)
 
 # JUCEInterface
-add_library(JUCEInterface INTERFACE)
-set(JUCE_MODULES
-    juce_core
-    juce_audio_basics
-    juce_audio_devices
-    juce_audio_utils
-    # juce_audio_formats
-    juce_gui_basics
-    # juce_gui_extra
-    juce_dsp
+add_library(JUCE_USAGE_REQUIREMENTS INTERFACE)
+target_include_directories(JUCE_USAGE_REQUIREMENTS INTERFACE ${CMAKE_SOURCE_DIR}/JUCE/modules)
+target_compile_definitions(JUCE_USAGE_REQUIREMENTS INTERFACE
+    JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1
+    JUCE_MODULE_AVAILABLE_juce_core=1
 )
-target_link_libraries(JUCEInterface INTERFACE ${JUCE_MODULES})
 
 add_subdirectory(Libraries)
-add_subdirectory(Components)
+# add_subdirectory(Components)
 
-add_subdirectory(App)
-# add_subdirectory(PureTest)
+# add_subdirectory(App)
+add_subdirectory(PureTest)
 
 # Force serial PDB writes
 # if(MSVC)

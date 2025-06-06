@@ -12,7 +12,7 @@ SerialMonitor::~SerialMonitor() {
 }
 
 void SerialMonitor::start() {
-    if (mode == "monitor" && !openPort("COM3"))
+    if (mode == "monitor" && !openPort("COM7"))
         return;
     startThread();
 }

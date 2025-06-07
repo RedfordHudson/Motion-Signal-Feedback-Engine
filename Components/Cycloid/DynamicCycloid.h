@@ -68,13 +68,13 @@ private:
         float tx = sub_center.x + sub_radius * std::cos(-phi);
         float ty = sub_center.y + sub_radius * std::sin(-phi);
 
-        tracer_points.push_back(juce::Point<float>(tx,ty));
-
         // Clamp tracer size
         if (tracer_points.size() > tracer_length) {
             // remove oldest point
-            tracer_points.erase(tracer_points.begin());
+            tracer_points.pop_front();
         }
+
+        tracer_points.push_back(juce::Point<float>(tx,ty));
     }
 
     float phase = 0.0f;
@@ -83,7 +83,6 @@ private:
     float sub_radius;
     juce::Point<float> sub_center;
     
-    // replace with circular buffer
-    std::vector<juce::Point<float>> tracer_points; // initializes automatically
+    std::deque<juce::Point<float>> tracer_points; // initializes automatically
     const float tracer_length = 50;
 };

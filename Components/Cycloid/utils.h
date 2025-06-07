@@ -10,20 +10,20 @@ inline static void drawCircle(juce::Graphics& g, const juce::Point<float>& cente
     g.drawEllipse(center.x - radius, center.y - radius, diameter, diameter, 1.0f);
 }
 
-inline static void plotPath(juce::Graphics& g, const std::vector<juce::Point<float>>& points, const juce::Colour& color = juce::Colours::white) {
+// can accept either vectors or deques, as long as they contain juce::Points
+template <typename Container>
+inline static void plotPath(juce::Graphics& g, const Container& points, const juce::Colour& color = juce::Colours::white) {
     g.setColour(color);
 
     if (points.empty())
         return;
 
+    auto it = std::begin(points);
     juce::Path path;
-    
-    // Start at first point
-    path.startNewSubPath(points[0]);
+    path.startNewSubPath(*it);
 
-    // Draw lines to subsequent points
-    for (size_t i = 1; i < points.size(); ++i)
-        path.lineTo(points[i]);
+    for (++it; it != std::end(points); ++it)
+        path.lineTo(*it);
 
     g.strokePath(path, juce::PathStrokeType(2.0f));
 }

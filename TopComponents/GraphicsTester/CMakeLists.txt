@@ -4,6 +4,3 @@
 target_link_libraries(GraphicsTester
     PRIVATE
 )
-
-get_target_property(dirs GraphicsTester INCLUDE_DIRECTORIES)
-message(STATUS "Direct include dirs: ${dirs}")

@@ -18,12 +18,8 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
     $<$<STREQUAL:${COMPONENT_MODE},MAIN>:BUILD_MAIN>
 )
 
-
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ${JUCE_MODULES}
         ${ENTRY_POINT}
 )
-
-get_target_property(dirs ${PROJECT_NAME} INCLUDE_DIRECTORIES)
-message(STATUS "Direct include dirs: ${dirs}")

@@ -1,6 +1,15 @@
 #include <JuceHeader.h>
-// #include <TestComponent.h>
-#include <AudioTestComponent.h>
+
+#if defined(TEST_GRAPHICS)
+    #include <GraphicsTester.h>
+#elif defined(TEST_AUDIO)
+    #include <AudioTester.h>
+#elif defined(BUILD_MAIN)
+    #include <MainComponent.h>
+#else
+    #error No component mode defined
+#endif
+
 
 class MainWindow : public juce::DocumentWindow
 {
@@ -8,8 +17,17 @@ public:
     MainWindow() : DocumentWindow("Test App", juce::Colours::black, DocumentWindow::allButtons)
     {
         setUsingNativeTitleBar(true);
-        // setContentOwned(new TestComponent(), true);
-        setContentOwned(new AudioTestComponent(), true);
+
+        #if defined(TEST_GRAPHICS)
+            setContentOwned(new GraphicsTester(), true);
+        #elif defined(TEST_AUDIO)
+            setContentOwned(new AudioTester(), true);
+        #elif defined(BUILD_MAIN)
+            setContentOwned(new MainComponent(), true);
+        #else
+            #error No component mode defined
+        #endif
+
         centreWithSize(800, 600);
         setVisible(true);
     }

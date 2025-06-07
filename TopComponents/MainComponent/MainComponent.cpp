@@ -1,4 +1,4 @@
-#include "AudioTestComponent.h"
+#include "MainComponent.h"
 
 #include <SerialMonitor.h>
 #include <HumanWare.h>
@@ -7,7 +7,7 @@
 #include <GraphVector.h>
 #include <algorithm>
 
-AudioTestComponent::AudioTestComponent()
+MainComponent::MainComponent()
     : 
     serialMonitor(std::make_unique<SerialMonitor>("simulate",6)),
     body(std::make_unique<Body>()),
@@ -35,18 +35,18 @@ AudioTestComponent::AudioTestComponent()
     serialMonitor->start();
 }
 
-AudioTestComponent::~AudioTestComponent() {
+MainComponent::~MainComponent() {
     shutdownAudio();
 }
 
-void AudioTestComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
+void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
     oscillator->prepareToPlay(samplesPerBlockExpected,sampleRate);
 
     transport->prepareToPlay((float)sampleRate);
 }
 
-void AudioTestComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
+void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     // Clear the buffer
     bufferToFill.clearActiveBufferRegion();

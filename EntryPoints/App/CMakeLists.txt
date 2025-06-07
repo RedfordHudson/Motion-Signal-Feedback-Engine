@@ -12,8 +12,18 @@ target_sources(${PROJECT_NAME}
 
 juce_generate_juce_header(${PROJECT_NAME})
 
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+    $<$<STREQUAL:${COMPONENT_MODE},GRAPHICS>:TEST_GRAPHICS>
+    $<$<STREQUAL:${COMPONENT_MODE},AUDIO>:TEST_AUDIO>
+    $<$<STREQUAL:${COMPONENT_MODE},MAIN>:BUILD_MAIN>
+)
+
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ${JUCE_MODULES}
-        AudioTestComponent
+        ${ENTRY_POINT}
 )
+
+get_target_property(dirs ${PROJECT_NAME} INCLUDE_DIRECTORIES)
+message(STATUS "Direct include dirs: ${dirs}")

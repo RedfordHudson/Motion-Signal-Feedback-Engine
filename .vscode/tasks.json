@@ -30,8 +30,8 @@
     {
       "label": "Run",
       "type": "shell",
-      "command": "${workspaceFolder}\\build\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
-      // "command": "taskkill /IM SynthEngine.exe /F & ${workspaceFolder}\\build\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
+      "command": "${workspaceFolder}\\build\\EntryPoints\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
+      // "command": "taskkill /IM SynthEngine.exe /F & ${workspaceFolder}\\build\\EntryPoints\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
       "problemMatcher": [],
       "group": {
         "kind": "test",
@@ -56,7 +56,7 @@
     {
       "label": "Build and Run",
       "type": "shell",
-      "command": "cmake --build build & ${workspaceFolder}\\build\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
+      "command": "cmake --build build & ${workspaceFolder}\\build\\EntryPoints\\App\\SynthEngine_artefacts\\Debug\\SynthEngine.exe",
       "problemMatcher": [],
       "group": {
         "kind": "build",

@@ -10,42 +10,32 @@ set(CMAKE_CXX_EXTENSIONS OFF)   # optional, prefer standard C++
 
 set(JUCE_MODULES_ONLY OFF CACHE BOOL "" FORCE)
 
-add_subdirectory(JUCE)
+set(COMPONENT_MODE "GRAPHICS" CACHE STRING "Component to build: GRAPHICS, AUDIO, MAIN")
+set_property(CACHE COMPONENT_MODE PROPERTY STRINGS GRAPHICS AUDIO MAIN)
+message("Configuring on mode: ${COMPONENT_MODE}")
 
-# JUCEInterface
+if(COMPONENT_MODE STREQUAL "GRAPHICS")
+    set(ENTRY_POINT GraphicsTester)
+elseif(COMPONENT_MODE STREQUAL "AUDIO")
+    set(ENTRY_POINT GraphicsTester)
+elseif(COMPONENT_MODE STREQUAL "MAIN")
+    set(ENTRY_POINT MainComponent)
+else()
+    message(FATAL_ERROR "Unknown COMPONENT_MODE: ${COMPONENT_MODE}")
+endif()
+
+add_subdirectory(cmake_utils)
+
 set(JUCE_MODULES
-    juce::juce_audio_utils
-    # juce::juce_gui_extra # if omitted, will cause linker error
-    juce_core
-    # juce_audio_basics
-    # juce_audio_devices
-    # juce_audio_utils
-    # juce_audio_formats
-    # juce_gui_basics
-    # juce_gui_extra
-    juce_dsp
+    # juce::juce_audio_utils
+    # juce::juce_dsp
+    juce::juce_gui_basics
 )
 
-add_library(JUCE_USAGE_REQUIREMENTS INTERFACE)
-target_link_libraries(JUCE_USAGE_REQUIREMENTS
-    INTERFACE
-        juce::juce_recommended_config_flags
-        juce::juce_recommended_lto_flags
-        juce::juce_recommended_warning_flags
-)
-target_include_directories(JUCE_USAGE_REQUIREMENTS INTERFACE ${CMAKE_SOURCE_DIR}/JUCE/modules)
-target_compile_definitions(JUCE_USAGE_REQUIREMENTS INTERFACE
-    JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1
-    JUCE_MODULE_AVAILABLE_juce_core=1
-)
+add_subdirectory(JUCE)
 
 add_subdirectory(Libraries)
 add_subdirectory(Components)
 
-add_subdirectory(App)
-add_subdirectory(PureTest)
-
-# Force serial PDB writes
-# if(MSVC)
-#     add_compile_options(/FS)
-# endif()
+add_subdirectory(TopComponents)
+add_subdirectory(EntryPoints)

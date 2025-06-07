@@ -28,11 +28,11 @@ private:
     std::vector<std::string> fields;
 };
 
-class AudioTestComponent : public juce::AudioAppComponent
+class MainComponent : public juce::AudioAppComponent
 {
 public:
-    AudioTestComponent();
-    ~AudioTestComponent();
+    MainComponent();
+    ~MainComponent();
 
     // AudioAppComponent overrides
     void prepareToPlay(int samplesPerBlockExpected, double sampleRate) override;
@@ -44,7 +44,7 @@ public:
         g.fillAll(juce::Colours::black);
         g.setColour(juce::Colours::white);
         g.setFont(20.0f);
-        g.drawText("Audio Test", getLocalBounds(), juce::Justification::centred, true);
+        g.drawText("Main", getLocalBounds(), juce::Justification::centred, true);
     }
     void resized() override {}
 
@@ -57,5 +57,5 @@ private:
     const std::vector<GraphMeta> meta;
     std::unique_ptr<GraphVector> graphVector;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTestComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };

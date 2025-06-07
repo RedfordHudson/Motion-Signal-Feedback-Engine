@@ -1,16 +1,16 @@
 #include "GraphicsTester.h"
 
-#include <Cycloid.h>
+#include <FrequencyDisplay.h>
 
 #include <iostream>
 
 GraphicsTester::GraphicsTester()
-    :cycloid(std::make_unique<Cycloid>("epi",0.3f))
+    :frequencyDisplay(std::make_unique<FrequencyDisplay>())
 {
     setSize(800, 600);
 
-    addAndMakeVisible(*cycloid);
-    cycloid->setBounds(getLocalBounds()); // make cycloid's size > 0
+    addAndMakeVisible(*frequencyDisplay);
+    frequencyDisplay->setBounds(getLocalBounds()); // make FrequencyDisplay's size > 0
 
 }
 

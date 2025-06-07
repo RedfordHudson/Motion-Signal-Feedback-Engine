@@ -2,7 +2,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 
-class Cycloid;
+class FrequencyDisplay;
 
 class GraphicsTester : public juce::Component
 {
@@ -13,7 +13,7 @@ public:
 
 private:
 
-    std::unique_ptr<Cycloid> cycloid;
+    std::unique_ptr<FrequencyDisplay> frequencyDisplay;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphicsTester)
 };

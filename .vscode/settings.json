@@ -90,6 +90,7 @@
         "cwctype": "cpp",
         "filesystem": "cpp",
         "fstream": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "regex": "cpp"
     }
 }

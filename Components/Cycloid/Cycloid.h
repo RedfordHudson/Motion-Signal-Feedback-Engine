@@ -11,18 +11,15 @@ public:
     }
 
     void paint(juce::Graphics& g) override {
-
-        origin = { getWidth() / 2.0f, getHeight() / 2.0f };
-
         g.fillAll(juce::Colours::black);
 
         // main circle
         drawCircle(g,origin,core_radius);
-
     }
 
     void resized() override {
-        // Layout logic if needed
+        origin = { getWidth() / 2.0f, getHeight() / 2.0f };
+
         repaint();
     }
 

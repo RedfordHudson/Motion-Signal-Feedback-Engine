@@ -1,7 +1,8 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
 // utilities / helper functions
-inline static void drawCircle(juce::Graphics& g, const juce::Point<float>& center, float radius) {
+inline static void drawCircle(juce::Graphics& g, const juce::Point<float>& center, float radius, const juce::Colour& color = juce::Colours::white) {
+    g.setColour(color);
 
     // Center the ellipse at center by offsetting top-left corner
     float diameter = radius * 2.0f;

@@ -3,4 +3,5 @@
 # Grapher.h in TestComponent.cpp -> PRIVATE; stays local to TestComponent
 target_link_libraries(GraphicsTester
     PRIVATE
+        Cycloid
 )

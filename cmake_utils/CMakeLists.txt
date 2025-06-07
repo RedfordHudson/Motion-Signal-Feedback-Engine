@@ -1,14 +1,12 @@
-message(STATUS "Loaded juse_usage_requirements")
-
 
 # usage requirements
 
 add_library(JUCE_USAGE_REQUIREMENTS INTERFACE)
 target_link_libraries(JUCE_USAGE_REQUIREMENTS
     INTERFACE
-        # juce::juce_recommended_config_flags
-        # juce::juce_recommended_lto_flags
-        # juce::juce_recommended_warning_flags
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags
 )
 target_include_directories(JUCE_USAGE_REQUIREMENTS INTERFACE ${CMAKE_SOURCE_DIR}/JUCE/modules)
 target_compile_definitions(JUCE_USAGE_REQUIREMENTS INTERFACE

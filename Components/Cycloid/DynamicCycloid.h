@@ -17,14 +17,14 @@ public:
         drawCircle(g,sub_center,sub_radius);
 
         // tracer
-        plotPath(g,tracer_points,juce::Colours::green);
+        plotFadePath(g,tracer_points,juce::Colours::green);
 
         // tracer node
         if (tracer_points.empty())
             return;
         
         const juce::Point<float> tracer_node_coord = tracer_points.back();
-        const float diameter = 6.0f;
+        const float diameter = 10.0f;
         g.fillEllipse(tracer_node_coord.x - diameter/2.0f,tracer_node_coord.y - diameter/2.0f,diameter,diameter);
     }
 

@@ -27,3 +27,22 @@ inline static void plotPath(juce::Graphics& g, const Container& points, const ju
 
     g.strokePath(path, juce::PathStrokeType(2.0f));
 }
+
+// fades opacity with index
+template <typename Container>
+inline static void plotFadePath(juce::Graphics& g, const Container& points, const juce::Colour& baseColor = juce::Colours::white) {
+    if (points.size() < 2)
+        return;
+
+    for (size_t i = 1; i < points.size(); ++i) {
+        float alpha = static_cast<float>(i) / (points.size() - 1); // from 0 (oldest) to 1 (newest)
+        juce::Colour c = baseColor.withAlpha(alpha);
+
+        juce::Path segmentPath;
+        segmentPath.startNewSubPath(points[i - 1]);
+        segmentPath.lineTo(points[i]);
+
+        g.setColour(c);
+        g.strokePath(segmentPath, juce::PathStrokeType(2.0f));
+    }
+}

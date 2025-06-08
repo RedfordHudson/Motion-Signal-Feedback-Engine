@@ -2,7 +2,7 @@
 
 class BarDisplay : public DynamicCycloid {
 public:
-    BarDisplay()
-        : DynamicCycloid("hypo",.25f)
+    BarDisplay(const bool master)
+        : DynamicCycloid("hypo",.25f,master)
     {}
 };

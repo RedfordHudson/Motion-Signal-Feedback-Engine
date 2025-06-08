@@ -22,7 +22,8 @@ public:
 
         // stop growing, start diminishing
         if (age >= life_span) {
-            trail_points.pop_front();
+            if (!trail_points.empty())
+                trail_points.pop_front();
             return false;
         }
 

@@ -19,4 +19,6 @@ private:
 
     juce::ADSR envelope;
     juce::ADSR::Parameters envelopeParams;
+
+    const float gain = 0.1f;
 };

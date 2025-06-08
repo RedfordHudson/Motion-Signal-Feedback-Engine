@@ -47,7 +47,7 @@ void OscillatorWrapper::applyEnvelope(juce::AudioBuffer<float>& buffer, const in
                 envelope.noteOn();
 
             float env = envelope.getNextSample();  // 0..1
-            samples[sample] *= env;
+            samples[sample] *= env * gain;
         }
     }
 }

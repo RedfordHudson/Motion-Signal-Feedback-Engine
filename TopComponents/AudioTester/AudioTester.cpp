@@ -4,10 +4,16 @@
 #include <BarDisplay.h>
 #include <BeatDisplay.h>
 
+#include <Transport.h>
+#include <OscillatorWrapper.h>
+
 AudioTester::AudioTester()
-    :frequencyDisplay(std::make_unique<FrequencyDisplay>()),
-    barDisplay(std::make_unique<BarDisplay>()),
-    beatDisplay(std::make_unique<BeatDisplay>(1.0f/8.0f))
+    :
+    transport(std::make_unique<Transport>(40)),
+    frequencyDisplay(std::make_unique<FrequencyDisplay>()),
+    barDisplay(std::make_unique<BarDisplay>(false)),
+    beatDisplay(std::make_unique<BeatDisplay>(4.0f/8.0f,true)),
+    oscillator(std::make_unique<OscillatorWrapper>(440.f))
 {
     addAndMakeVisible(*frequencyDisplay);
     addAndMakeVisible(*barDisplay);
@@ -46,6 +52,9 @@ void AudioTester::resized() {
 
 void AudioTester::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
+    oscillator->prepareToPlay(samplesPerBlockExpected,sampleRate);
+
+    transport->prepareToPlay((float)sampleRate);
 }
 
 void AudioTester::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
@@ -54,4 +63,10 @@ void AudioTester::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
     bufferToFill.clearActiveBufferRegion();
 
     juce::AudioBuffer<float>& buffer = *bufferToFill.buffer;
+    
+    auto [beatSampleIndex, phase, cycleBeatSampleIndex, cyclePhase] = transport->processBlock(bufferToFill);
+
+    beatDisplay->updatePhase(phase);
+
+    oscillator->processBlock(buffer,beatSampleIndex);
 }

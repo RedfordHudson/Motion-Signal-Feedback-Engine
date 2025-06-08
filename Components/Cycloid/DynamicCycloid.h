@@ -5,8 +5,8 @@
 
 class DynamicCycloid : public Cycloid {
 public:
-    DynamicCycloid(const std::string& type, const float ratio)
-        : Cycloid(type,ratio)
+    DynamicCycloid(const std::string& type, const float ratio, const bool master = true)
+        : Cycloid(type,ratio), master(master)
     {}
 
     void paint(juce::Graphics& g) override {
@@ -32,7 +32,7 @@ public:
         phase = newPhase;
         sub_phase_cur = std::fmod(phase / ratio, 1.0f); // % 
 
-        if (sub_phase_cur < sub_phase_prev) {
+        if (master && sub_phase_cur < sub_phase_prev) {
             beatEvent();
         }
 
@@ -46,9 +46,6 @@ public:
         updateSubCenter();
         updateTracer();
 
-        if (phase == 0.0)
-            beatEvent();
-
         updateComets();
 
         repaint();
@@ -60,8 +57,14 @@ public:
     }
 
     void beatEvent() {
+        // std::cout << std::to_string(sub_phase_cur) << "-" << std::to_string(sub_phase_prev) << std::endl;
         comets.push_back(std::make_unique<Comet>(origin,core_radius,theta));
     }
+
+protected:
+    // true -> triggers comets internally
+    // false -> consumes triggers externally
+    const bool master;
 
 private:
 

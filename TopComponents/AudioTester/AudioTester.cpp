@@ -1,14 +1,15 @@
 #include "AudioTester.h"
 
-#include <RatioDisplay.h>
-#include <BarDisplay.h>
-#include <BeatDisplay.h>
+#include <SerialMonitor.h>
 
 #include <Transport.h>
 #include <OscillatorWrapper.h>
 
+#include <GraphVector.h>
 
-
+#include <RatioDisplay.h>
+#include <BarDisplay.h>
+#include <BeatDisplay.h>
 
 #include <vector>
 #include <cmath>
@@ -62,9 +63,17 @@ private:
 
 AudioTester::AudioTester()
     :
+    serialMonitor(std::make_unique<SerialMonitor>("simulate",6)),
     transport(std::make_unique<Transport>(40,3.0f/8.0f)),
-    ratioDisplay(std::make_unique<RatioDisplay>()),
     sq(std::make_unique<SoftQuantizer>()),
+    meta({
+        GraphMeta("accel", "sensor", {"x", "y", "z"}),
+        GraphMeta("gyro", "sensor", {"x", "y", "z"}),
+        GraphMeta("transport", "rhythmic", {"phase", "cyclePhase"}),
+        GraphMeta("parameter", "parameter", {"gyro_y","n"})
+    }),
+    graphVector(std::make_unique<GraphVector>(meta)),
+    ratioDisplay(std::make_unique<RatioDisplay>()),
     barDisplay(std::make_unique<BarDisplay>(true)),
     beatDisplay(std::make_unique<BeatDisplay>(3.0f/8.0f,true)),
     oscillator(std::make_unique<OscillatorWrapper>(440.f))

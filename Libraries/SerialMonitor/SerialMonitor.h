@@ -18,16 +18,16 @@ class SerialMonitor : public juce::Thread
 public:
     using Callback = std::function<void(const std::vector<float>)>;
 
-    SerialMonitor(const std::string mode, const int size);
+    SerialMonitor(const std::string mode, const unsigned int size);
     ~SerialMonitor();
 
     void start();
 
-    void setCallback(Callback callback);
+    void setCallback(Callback newCallback);
 
 protected:
     const std::string mode;
-    const int size;
+    const unsigned int size;
 
 private:
     Callback callback;

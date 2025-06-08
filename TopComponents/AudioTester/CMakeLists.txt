@@ -3,4 +3,6 @@ target_link_libraries(AudioTester
         CycloidDisplays
         Transport
         OscillatorWrapper
+        SerialMonitor
+        GraphVector
 )

@@ -9,7 +9,7 @@ GraphVector::GraphVector(const std::vector<GraphMeta>& meta)
     const int width = 800;
     const int height = 600;
 
-    for (int i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++) {
         graphs.push_back(std::make_unique<Grapher>(meta[i], width, height/size));
     }
     
@@ -36,7 +36,7 @@ void GraphVector::resized()
     auto area = getLocalBounds();
     int graphHeight = area.getHeight() / size;
 
-    for (int i = 0; i < size; ++i)
+    for (unsigned int i = 0; i < size; ++i)
     {
         graphs[i]->setBounds(0, i * graphHeight, area.getWidth(), graphHeight);
     }
@@ -49,6 +49,6 @@ void GraphVector::pushSample(const std::vector<std::vector<float>> sample) {
         return;
     }
 
-    for (int i = 0; i < size; i++)
+    for (unsigned int i = 0; i < size; i++)
         graphs[i]->pushSample(sample[i]);
 }

@@ -1,6 +1,6 @@
 #include "SerialMonitor.h"
 
-SerialMonitor::SerialMonitor(const std::string mode, const int size)
+SerialMonitor::SerialMonitor(const std::string mode, const unsigned int size)
     : mode(mode), size(size),
     Thread("Serial Monitor")
 {}
@@ -66,9 +66,9 @@ void SerialMonitor::guardedCallback(const std::vector<float> sample) {
         callback(sample);
 }
 
-void SerialMonitor::setCallback(Callback callback)
+void SerialMonitor::setCallback(Callback newCallback)
 {
-    this->callback = callback;
+    this->callback = newCallback;
 }
 
 void SerialMonitor::run() {
@@ -122,7 +122,7 @@ static std::vector<float> vectorizeString(const std::string& completeMsg) {
     while (std::getline(ss, value, ',')) {
         try {
             values.push_back(std::stof(value));
-        } catch (const std::exception& e) {
+        } catch (...) {
             std::cerr << "Error parsing value: " << value << std::endl;
         }
     }
@@ -136,7 +136,7 @@ static std::vector<float> vectorizeString(const std::string& completeMsg) {
 const std::vector<float> SerialMonitor::generateSample()
 {
     std::vector<float> sample(size);
-    for (int i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++) {
         // Generate random floats between -1.0 and 1.0
         sample[i] = static_cast<float>(dis(gen));
     }

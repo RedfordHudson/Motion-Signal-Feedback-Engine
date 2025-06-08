@@ -17,7 +17,7 @@ public:
     void pushSample(const std::vector<std::vector<float>> sample);
 
 protected:
-    const int size;
+    const unsigned int size;
 
 private:
     std::vector<std::unique_ptr<Grapher>> graphs;

@@ -1,5 +1,5 @@
-# set(LIBS Transport OscillatorWrapper Cycle SerialMonitor)
-set(LIBS Transport Cycle OscillatorWrapper)
+set(LIBS Transport OscillatorWrapper Cycle SerialMonitor)
+# set(LIBS Transport Cycle OscillatorWrapper)
 # HumanWare is added separately (bottom) b/c it has different architecture
 
 foreach(LIB ${LIBS})

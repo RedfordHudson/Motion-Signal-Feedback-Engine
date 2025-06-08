@@ -21,7 +21,7 @@ Grapher::Grapher(
     setSize(width, height);
     
     // generate legend
-    for (int i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++) {
         const juce::Colour& color = getPathColor(i);
         generateLegend(i,color);
     }
@@ -39,7 +39,7 @@ void Grapher::paint(juce::Graphics& g)
     if (cur_length == 0)
         return;
 
-    for (int i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++) {
         // Draw the waveform
         const juce::Colour& color = getPathColor(i);
         g.setColour(color);
@@ -64,7 +64,6 @@ void Grapher::generateLegend(const int fieldIndex, const juce::Colour& color) {
     legendLabel->setColour(juce::Label::backgroundColourId, juce::Colours::black);
 
     legendLabel->setColour(juce::Label::outlineColourId, getBorderColor());
-    legendLabel->setFont(juce::Font(14.0f));
     legendLabel->setJustificationType(juce::Justification::centredLeft);
 
     // Calculate width based on text size
@@ -91,7 +90,7 @@ void Grapher::pushSample(const std::vector<float> sample) {
         return;
     }
 
-    for (int i = 0; i < size; i++) {
+    for (unsigned int i = 0; i < size; i++) {
         
         buffers[i].push_back(sample[i]);
 
@@ -149,7 +148,7 @@ float Grapher::valueToY(float value) const
 
 float Grapher::indexToX(int index) const
 {
-    return index * getWidth() / (windowSize - 1);
+    return (float)index * getWidth() / ((float)windowSize - 1);
 }
 
 void Grapher::renderPlot(juce::Graphics& g, const int fieldIndex)
@@ -164,7 +163,7 @@ void Grapher::renderPlot(juce::Graphics& g, const int fieldIndex)
     path.startNewSubPath(indexToX(start_index), valueToY(buffers[fieldIndex][0]));
 
     // Draw lines to subsequent points
-    for (size_t i = 1; i < cur_length; ++i)
+    for (int i = 1; i < cur_length; ++i)
     {
         path.lineTo(indexToX(start_index + i), valueToY(buffers[fieldIndex][i]));
     }

@@ -40,7 +40,7 @@ protected:
     const std::string name;
     const std::string type;
     const std::vector<std::string> fields;
-    const int size;
+    const unsigned int size;
 
 private:
 

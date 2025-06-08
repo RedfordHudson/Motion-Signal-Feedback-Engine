@@ -4,12 +4,14 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_dsp/juce_dsp.h>
 
+class Transport;
+class OscillatorWrapper;
+
+class SoftQuantizer;
+
 class RatioDisplay;
 class BarDisplay;
 class BeatDisplay;
-
-class Transport;
-class OscillatorWrapper;
 
 class AudioTester : public juce::AudioAppComponent
 {
@@ -28,12 +30,14 @@ public:
 
 private:
 
+    std::unique_ptr<Transport> transport;
+    std::unique_ptr<OscillatorWrapper> oscillator;
+
+    std::unique_ptr<SoftQuantizer> sq;
+
     std::unique_ptr<RatioDisplay> ratioDisplay;
     std::unique_ptr<BarDisplay> barDisplay;
     std::unique_ptr<BeatDisplay> beatDisplay;
-
-    std::unique_ptr<Transport> transport;
-    std::unique_ptr<OscillatorWrapper> oscillator;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioTester)
 };

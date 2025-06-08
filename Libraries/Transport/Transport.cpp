@@ -2,9 +2,9 @@
 
 #include <Cycle.h>
 
-Transport::Transport(const int BASELINE_BPM)
+Transport::Transport(const int BASELINE_BPM, const float ratio)
     : BASELINE_BPM(BASELINE_BPM),
-    cycle(std::make_unique<Cycle>(8))
+    cycle(std::make_unique<Cycle>(ratio))
 {
     samples_for_current_beat = 0;
     beat_count = 0;
@@ -16,7 +16,7 @@ void Transport::prepareToPlay(const float sampleRate) {
     SAMPLE_RATE = sampleRate; // = 48k
 
     // beats/second = (beats/minute) * (minutes/second)
-    float beats_per_second = BASELINE_BPM / 60.0;
+    float beats_per_second = (float)BASELINE_BPM / 60.0f;
 
     // samples/beat = (samples/second) / (beats/second)
     SAMPLES_PER_BEAT = SAMPLE_RATE / beats_per_second; // = 18k
@@ -43,15 +43,24 @@ const std::tuple<int,float,int,float> Transport::processBlock(const juce::AudioS
     //     << " samples/beat: " << std::to_string(static_cast<int>(SAMPLES_PER_BEAT)) 
     //     << std::endl;
 
+    int cycleBeatSampleIndex;
+
     // beat starts in current buffer -> trigger beat
     if (beatSampleIndex < buffer_size) {
         triggerBeat();
+
         samples_for_current_beat -= static_cast<int>(SAMPLES_PER_BEAT);
+
+        cycle->synchronizeToTransport(samples_for_current_beat);
+        cycleBeatSampleIndex = beatSampleIndex;
+    }
+    else {
+        cycleBeatSampleIndex = cycle->processBlock(buffer_size);
     }
 
     const float phase = samples_for_current_beat / SAMPLES_PER_BEAT;
+    const float cyclePhase = cycle->getPhase();
 
-    auto [cycleBeatSampleIndex, cyclePhase] = cycle->processBlock(buffer_size);
 
     // return std::make_tuple(beatSampleIndex, phase);
     return std::make_tuple(beatSampleIndex, phase, cycleBeatSampleIndex, cyclePhase);
@@ -61,16 +70,15 @@ void Transport::triggerBeat() {
     beat_count++;
 
     // config
-    if (beat_count % 2 == 0)
-        cycle->updatePattern({0,4});
-    else
-        cycle->updatePattern({0,3,6});
+    // if (beat_count % 2 == 0)
+    //     cycle->updatePattern({0,4});
+    // else
+    //     cycle->updatePattern({0,3,6});
     
     // std::cout << "beat: " << std::to_string(beat_count) << std::endl;
 
-    cycle->resetBeatCount();
 }
 
-void Transport::modulateN(const int n) {
-    cycle->modulateN(n);
+void Transport::updateRatio(const float newRatio) {
+    cycle->updateRatio(newRatio);
 }

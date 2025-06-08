@@ -5,7 +5,7 @@ class Cycle;
 
 class Transport {
 public:
-    Transport(const int BASELINE_BPM);
+    Transport(const int BASELINE_BPM, const float ratio);
     ~Transport();
 
     void prepareToPlay(const float sampleRate);
@@ -14,7 +14,7 @@ public:
 
     void triggerBeat();
 
-    void modulateN(const int n);
+    void updateRatio(const float newRatio);
 
 protected:
     const int BASELINE_BPM;

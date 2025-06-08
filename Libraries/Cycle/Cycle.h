@@ -3,23 +3,21 @@
 
 class Cycle {
 public:
-    Cycle(int n);
+    Cycle(const float ratio);
     ~Cycle() {}
     
     void prepareToPlay(const float parent_samples_per_beat);
 
-    void updatePattern(std::vector<int> newPattern);
-    
-    std::tuple<int,float> Cycle::processBlock(const int buffer_size);
+    const int Cycle::processBlock(const int buffer_size);
 
-    const bool onPattern();
+    const float getPhase() const;
 
-    void modulateN(const int n);
+    void synchronizeToTransport(const int transport_samples_for_current_beat);
 
-    void resetBeatCount();
+    void updateRatio(const float newRatio);
 
 protected:
-    int n;
+    float ratio;
 
 private:
     std::vector<int> pattern;
@@ -27,5 +25,4 @@ private:
     float SAMPLES_PER_BEAT;
 
     int samples_for_current_beat;
-    int beat_count;
 };

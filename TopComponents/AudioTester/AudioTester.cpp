@@ -9,10 +9,10 @@
 
 AudioTester::AudioTester()
     :
-    transport(std::make_unique<Transport>(40)),
+    transport(std::make_unique<Transport>(40,3.0f/8.0f)),
     frequencyDisplay(std::make_unique<FrequencyDisplay>()),
     barDisplay(std::make_unique<BarDisplay>(false)),
-    beatDisplay(std::make_unique<BeatDisplay>(4.0f/8.0f,true)),
+    beatDisplay(std::make_unique<BeatDisplay>(3.0f/8.0f,true)),
     oscillator(std::make_unique<OscillatorWrapper>(440.f))
 {
     addAndMakeVisible(*frequencyDisplay);
@@ -68,5 +68,5 @@ void AudioTester::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
 
     beatDisplay->updatePhase(phase);
 
-    oscillator->processBlock(buffer,beatSampleIndex);
+    oscillator->processBlock(buffer,cycleBeatSampleIndex);
 }

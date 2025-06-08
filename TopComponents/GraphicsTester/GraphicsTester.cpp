@@ -11,10 +11,12 @@ GraphicsTester::GraphicsTester()
     barDisplay(std::make_unique<BarDisplay>()),
     beatDisplay(std::make_unique<BeatDisplay>(1.0f/8.0f))
 {
-    setSize(800, 600);
 
+    addAndMakeVisible(*frequencyDisplay);
+    addAndMakeVisible(*barDisplay);
     addAndMakeVisible(*beatDisplay);
-    beatDisplay->setBounds(getLocalBounds()); // make display's size > 0
+
+    setSize(800, 600);
 
     startTimerHz(30); // updates 30 times per second
 
@@ -30,10 +32,17 @@ void GraphicsTester::paint(juce::Graphics& g)
     g.drawRect(getLocalBounds(), 1);
 }
 
-void GraphicsTester::resized()
-{
-    // Called when the component is resized
+void GraphicsTester::resized() {
+    juce::FlexBox flexbox;
+    flexbox.flexDirection = juce::FlexBox::Direction::column;
+
+    for (auto* child : getChildren()) {
+        flexbox.items.add(juce::FlexItem(*child).withFlex(1.0f));
+    }
+
+    flexbox.performLayout(getLocalBounds());
 }
+
 
 void GraphicsTester::timerCallback() {
     // static keyword makes phase retain its value across calls, even though it's declared inside the function
@@ -44,6 +53,7 @@ void GraphicsTester::timerCallback() {
         phase -= 1.0f;
     
     if (beatDisplay)
+        barDisplay->updatePhase(phase);
         beatDisplay->updatePhase(phase);
 
 }

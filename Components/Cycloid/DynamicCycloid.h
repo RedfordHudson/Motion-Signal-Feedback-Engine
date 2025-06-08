@@ -6,10 +6,8 @@
 class DynamicCycloid : public Cycloid {
 public:
     DynamicCycloid(const std::string& type, const float ratio)
-        : Cycloid(type,ratio),
-        sub_radius(core_radius * ratio)
-    {
-    }
+        : Cycloid(type,ratio)
+    {}
 
     void paint(juce::Graphics& g) override {
 
@@ -68,6 +66,9 @@ public:
 private:
 
     void updateSubCenter() {
+        
+        sub_radius = core_radius * ratio;
+
         float cx = origin.x + (core_radius - sub_radius) * std::cos(theta);
         float cy = origin.y + (core_radius - sub_radius) * std::sin(theta);
 
@@ -101,7 +102,7 @@ private:
         const float diameter = 10.0f;
         g.fillEllipse(tracer_node_coord.x - diameter/2.0f,tracer_node_coord.y - diameter/2.0f,diameter,diameter);
     }
-    
+
     void updateComets() {
         bool destroyFirst = false;
 

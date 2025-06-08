@@ -6,12 +6,16 @@ class Cycloid : public juce::Component {
 public:
     Cycloid(const std::string& type, const float ratio)
         : type(type), ratio(ratio)
-    {
-        // setBounds(getLocalBounds());
-    }
+    {}
 
     void paint(juce::Graphics& g) override {
+
+        // background
         g.fillAll(juce::Colours::black);
+
+        // border
+        g.setColour(juce::Colours::grey);
+        g.drawRect(getLocalBounds(), 1);
 
         // main circle
         drawCircle(g,origin,core_radius);
@@ -20,15 +24,17 @@ public:
     void resized() override {
         origin = { getWidth() / 2.0f, getHeight() / 2.0f };
 
+        core_radius = (float)getHeight() / (4.0f + 0.15f);
+
         repaint();
     }
 
 protected:
     const std::string type;
 
-    const float core_radius = 100.0f;
-    float ratio;
     juce::Point<float> origin;
+    float core_radius;
+    float ratio;
 
     void updateRatio(const float newRatio) {
         ratio = newRatio;

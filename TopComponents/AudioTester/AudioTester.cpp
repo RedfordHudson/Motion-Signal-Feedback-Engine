@@ -123,12 +123,15 @@ void AudioTester::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
     beatDisplay->updatePhase(phase);
     barDisplay->updatePhase(transport->calculateBarPhase());
 
-    // const float ratio = (float)((transport->getBeatCount() % 4) + 1) / 4.0f;
-    float ratio = transport->calculateBarPhase();
-    ratio = sq->quantize(ratio);
-    ratio = (15.0f+ratio)/20.0f;
-    ratioDisplay->updateRatio(ratio);
-    oscillator->modulateFrequency(ratio);
+    float ratio_freq = transport->calculateBarPhase();
+    ratio_freq = sq->quantize(ratio_freq);
+    ratio_freq = (15.0f+ratio_freq)/20.0f;
+    ratioDisplay->updateRatio(ratio_freq);
+    oscillator->modulateFrequency(ratio_freq);
+
+    float ratio_cycle = (transport->getBeatCount() % 2 == 0) ? .5f : 3.0f/8.0f;
+    beatDisplay->updateRatio(ratio_cycle);
+    transport->updateRatio(ratio_cycle);
 
     oscillator->processBlock(buffer,cycleBeatSampleIndex);
 }

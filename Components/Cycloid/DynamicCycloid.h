@@ -10,16 +10,19 @@ public:
     {}
 
     void paint(juce::Graphics& g) override {
+        try {
+            // super().paint()
+            Cycloid::paint(g);
 
-        // super().paint()
-        Cycloid::paint(g);
+            // roller circle
+            drawCircle(g,sub_center,sub_radius);
 
-        // roller circle
-        drawCircle(g,sub_center,sub_radius);
+            renderTracer(g);
 
-        renderTracer(g);
-
-        renderComets(g);
+            renderComets(g);
+        } catch (...) {
+            std::cout << "Exception caught in paint()" << std::endl;
+        }
     }
 
     void resized() override {
@@ -47,7 +50,7 @@ public:
         updateTracer();
 
         updateComets();
-
+     
         repaint();
     }
 
@@ -86,6 +89,8 @@ private:
 
         // Clamp tracer size
         if (tracer_points.size() > tracer_length) {
+            if (tracer_points.empty())
+                std::cout << "updateTracer(): cooked" << std::endl;
             // remove oldest point
             tracer_points.pop_front();
         }
@@ -97,13 +102,21 @@ private:
         if (tracer_points.empty())
             return;
 
-        // tracer
-        plotFadePath(g,tracer_points,juce::Colours::green);
+        // Get a copy for safe iteration and access outside the lock
+        auto pointsCopy = tracer_points.getCopy();
 
-        // tracer node
-        const juce::Point<float> tracer_node_coord = tracer_points.back();
+        if (pointsCopy.empty())
+            return;
+
+        // Draw tracer path from the copy
+        plotFadePath(g, pointsCopy, juce::Colours::green);
+
+        // Draw tracer node using last point in copy
+        const juce::Point<float>& tracer_node_coord = pointsCopy.back();
         const float diameter = 10.0f;
-        g.fillEllipse(tracer_node_coord.x - diameter/2.0f,tracer_node_coord.y - diameter/2.0f,diameter,diameter);
+        g.fillEllipse(tracer_node_coord.x - diameter / 2.0f,
+                    tracer_node_coord.y - diameter / 2.0f,
+                    diameter, diameter);
     }
 
     void updateComets() {
@@ -131,10 +144,10 @@ private:
     float sub_phase_prev = 0.0f;
     float theta = 0.0f;
 
-    float sub_radius;
+    float sub_radius = 1.0f;
     juce::Point<float> sub_center;
     
-    std::deque<juce::Point<float>> tracer_points; // initializes automatically
+    ThreadSafeDeque<juce::Point<float>> tracer_points; // initializes automatically
     const unsigned int tracer_length = 50;
 
     std::deque<std::unique_ptr<Comet>> comets;

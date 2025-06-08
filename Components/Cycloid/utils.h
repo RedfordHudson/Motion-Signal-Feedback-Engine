@@ -1,6 +1,7 @@
 #pragma once
 
 #include <juce_gui_basics/juce_gui_basics.h>
+#include <deque>
 
 // declaration (necessary to avoid clashing definition caused by multiple includes)
 inline void drawCircle(juce::Graphics& g, const juce::Point<float>& center, float radius, const juce::Colour& color = juce::Colours::white);
@@ -51,3 +52,62 @@ inline static void plotFadePath(juce::Graphics& g, const Container& points, cons
         g.strokePath(segmentPath, juce::PathStrokeType(2.0f));
     }
 }
+
+template<typename T>
+class ThreadSafeDeque {
+public:
+    void push_back(const T& item) {
+        const juce::ScopedLock lock(mutex_);
+        deque_.push_back(item);
+    }
+
+    void push_front(const T& item) {
+        const juce::ScopedLock lock(mutex_);
+        deque_.push_front(item);
+    }
+
+    bool pop_front() {
+        const juce::ScopedLock lock(mutex_);
+        if (deque_.empty())
+            return false;
+        deque_.pop_front();
+        return true;
+    }
+
+    bool empty() const {
+        const juce::ScopedLock lock(mutex_);
+        return deque_.empty();
+    }
+
+    size_t size() const {
+        const juce::ScopedLock lock(mutex_);
+        return deque_.size();
+    }
+
+    // Access the front/back elements safely - returns a copy
+    bool front(T& out) const {
+        const juce::ScopedLock lock(mutex_);
+        if (deque_.empty())
+            return false;
+        out = deque_.front();
+        return true;
+    }
+
+    bool back(T& out) const {
+        const juce::ScopedLock lock(mutex_);
+        if (deque_.empty())
+            return false;
+        out = deque_.back();
+        return true;
+    }
+
+    // Get a copy of the entire deque for safe iteration
+    std::deque<T> getCopy() const {
+        const juce::ScopedLock lock(mutex_);
+        return deque_;
+    }
+
+private:
+    mutable juce::CriticalSection mutex_;
+    std::deque<T> deque_;
+};

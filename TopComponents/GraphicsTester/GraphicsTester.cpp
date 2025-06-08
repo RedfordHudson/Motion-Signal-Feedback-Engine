@@ -2,20 +2,19 @@
 
 #include <FrequencyDisplay.h>
 #include <BarDisplay.h>
+#include <BeatDisplay.h>
 
 #include <iostream>
 
 GraphicsTester::GraphicsTester()
     :frequencyDisplay(std::make_unique<FrequencyDisplay>()),
-    barDisplay(std::make_unique<BarDisplay>())
+    barDisplay(std::make_unique<BarDisplay>()),
+    beatDisplay(std::make_unique<BeatDisplay>(1.0f/8.0f))
 {
     setSize(800, 600);
 
-    addAndMakeVisible(*barDisplay);
-    barDisplay->setBounds(getLocalBounds()); // make display's size > 0
-
-    for (auto i = 0;i<5;i++)
-        barDisplay->updatePhase((float)i/50.0f);
+    addAndMakeVisible(*beatDisplay);
+    beatDisplay->setBounds(getLocalBounds()); // make display's size > 0
 
     startTimerHz(30); // updates 30 times per second
 
@@ -44,7 +43,7 @@ void GraphicsTester::timerCallback() {
     if (phase >= 1.0f)
         phase -= 1.0f;
     
-    if (barDisplay)
-        barDisplay->updatePhase(phase);
+    if (beatDisplay)
+        beatDisplay->updatePhase(phase);
 
 }

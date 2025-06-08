@@ -4,6 +4,7 @@
 
 class FrequencyDisplay;
 class BarDisplay;
+class BeatDisplay;
 
 class GraphicsTester : public juce::Component, private juce::Timer
 {
@@ -18,6 +19,7 @@ private:
 
     std::unique_ptr<FrequencyDisplay> frequencyDisplay;
     std::unique_ptr<BarDisplay> barDisplay;
+    std::unique_ptr<BeatDisplay> beatDisplay;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphicsTester)
 };

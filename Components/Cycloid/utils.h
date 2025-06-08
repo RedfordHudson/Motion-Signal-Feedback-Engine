@@ -1,7 +1,12 @@
+#pragma once
+
 #include <juce_gui_basics/juce_gui_basics.h>
 
-// utilities / helper functions
-inline static void drawCircle(juce::Graphics& g, const juce::Point<float>& center, float radius, const juce::Colour& color = juce::Colours::white) {
+// declaration (necessary to avoid clashing definition caused by multiple includes)
+inline void drawCircle(juce::Graphics& g, const juce::Point<float>& center, float radius, const juce::Colour& color = juce::Colours::white);
+
+// definition
+inline void drawCircle(juce::Graphics& g, const juce::Point<float>& center, float radius, const juce::Colour& color) {
     g.setColour(color);
 
     // Center the ellipse at center by offsetting top-left corner

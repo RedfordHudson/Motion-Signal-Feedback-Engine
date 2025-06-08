@@ -1,8 +1,8 @@
 #include "StaticCycloid.h"
 
-class FrequencyDisplay : public StaticCycloid {
+class RatioDisplay : public StaticCycloid {
 public:
-    FrequencyDisplay()
+    RatioDisplay()
         : StaticCycloid("epi",1.0f/3.0f)
     {}
 };

@@ -4,7 +4,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_dsp/juce_dsp.h>
 
-class FrequencyDisplay;
+class RatioDisplay;
 class BarDisplay;
 class BeatDisplay;
 
@@ -28,7 +28,7 @@ public:
 
 private:
 
-    std::unique_ptr<FrequencyDisplay> frequencyDisplay;
+    std::unique_ptr<RatioDisplay> ratioDisplay;
     std::unique_ptr<BarDisplay> barDisplay;
     std::unique_ptr<BeatDisplay> beatDisplay;
 

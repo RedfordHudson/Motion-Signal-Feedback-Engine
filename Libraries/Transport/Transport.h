@@ -16,6 +16,10 @@ public:
 
     void updateRatio(const float newRatio);
 
+    const float calculateBarPhase() const;
+
+    const int getBeatCount() const { return beat_count; }
+
 protected:
     const int BASELINE_BPM;
 
@@ -25,6 +29,8 @@ private:
 
     int samples_for_current_beat;
     int beat_count;
+
+    float phase = 0.0f;
 
     std::unique_ptr<Cycle> cycle;
 };

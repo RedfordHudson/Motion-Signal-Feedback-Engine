@@ -58,7 +58,7 @@ const std::tuple<int,float,int,float> Transport::processBlock(const juce::AudioS
         cycleBeatSampleIndex = cycle->processBlock(buffer_size);
     }
 
-    const float phase = samples_for_current_beat / SAMPLES_PER_BEAT;
+    phase = samples_for_current_beat / SAMPLES_PER_BEAT;
     const float cyclePhase = cycle->getPhase();
 
 
@@ -81,4 +81,9 @@ void Transport::triggerBeat() {
 
 void Transport::updateRatio(const float newRatio) {
     cycle->updateRatio(newRatio);
+}
+
+
+const float Transport::calculateBarPhase() const {
+    return ( float( beat_count % 4 ) + phase ) / 4.0f;
 }

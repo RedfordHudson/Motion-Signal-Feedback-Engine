@@ -1,10 +1,10 @@
 #include "OscillatorWrapper.h"
 
-OscillatorWrapper::OscillatorWrapper(float frequency)
-    : frequency(frequency)
+OscillatorWrapper::OscillatorWrapper(const float BASE_FREQUENCY)
+    : BASE_FREQUENCY(BASE_FREQUENCY)
 {
     oscillator.initialise( [](float x) {return std::sin(x); } );
-    oscillator.setFrequency(frequency);
+    oscillator.setFrequency(BASE_FREQUENCY);
     
     // Envelope parameters (in seconds / normalized)
     envelopeParams.attack  = 0.008f;
@@ -50,4 +50,8 @@ void OscillatorWrapper::applyEnvelope(juce::AudioBuffer<float>& buffer, const in
             samples[sample] *= env * gain;
         }
     }
+}
+
+void OscillatorWrapper::modulateFrequency(const float ratio) {
+    oscillator.setFrequency(BASE_FREQUENCY * ratio);
 }

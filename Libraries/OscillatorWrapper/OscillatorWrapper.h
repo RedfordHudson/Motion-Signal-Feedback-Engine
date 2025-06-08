@@ -3,7 +3,7 @@
 
 class OscillatorWrapper {
 public:
-    OscillatorWrapper(float frequency);
+    OscillatorWrapper(const float BASE_FREQUENCY);
     ~OscillatorWrapper() {}
 
     void prepareToPlay(int samplesPerBlockExpected, double sampleRate);
@@ -12,8 +12,10 @@ public:
 
     void applyEnvelope(juce::AudioBuffer<float>& buffer, const int beatSampleIndex);
 
+    void modulateFrequency(const float ratio);
+
 protected:
-    float frequency;
+    float BASE_FREQUENCY;
 private:
     juce::dsp::Oscillator<float> oscillator;
 

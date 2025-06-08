@@ -1,6 +1,6 @@
 #include "AudioTester.h"
 
-#include <FrequencyDisplay.h>
+#include <RatioDisplay.h>
 #include <BarDisplay.h>
 #include <BeatDisplay.h>
 
@@ -10,12 +10,12 @@
 AudioTester::AudioTester()
     :
     transport(std::make_unique<Transport>(40,3.0f/8.0f)),
-    frequencyDisplay(std::make_unique<FrequencyDisplay>()),
-    barDisplay(std::make_unique<BarDisplay>(false)),
+    ratioDisplay(std::make_unique<RatioDisplay>()),
+    barDisplay(std::make_unique<BarDisplay>(true)),
     beatDisplay(std::make_unique<BeatDisplay>(3.0f/8.0f,true)),
     oscillator(std::make_unique<OscillatorWrapper>(440.f))
 {
-    addAndMakeVisible(*frequencyDisplay);
+    addAndMakeVisible(*ratioDisplay);
     addAndMakeVisible(*barDisplay);
     addAndMakeVisible(*beatDisplay);
 
@@ -67,6 +67,12 @@ void AudioTester::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
     auto [beatSampleIndex, phase, cycleBeatSampleIndex, cyclePhase] = transport->processBlock(bufferToFill);
 
     beatDisplay->updatePhase(phase);
+    barDisplay->updatePhase(transport->calculateBarPhase());
+
+    // const float ratio = (float)((transport->getBeatCount() % 4) + 1) / 4.0f;
+    const float ratio = transport->calculateBarPhase() + .25f;
+    ratioDisplay->updateRatio(ratio);
+    oscillator->modulateFrequency(ratio);
 
     oscillator->processBlock(buffer,cycleBeatSampleIndex);
 }

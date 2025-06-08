@@ -64,15 +64,15 @@ private:
 
 AudioTester::AudioTester()
     :
-    serialMonitor(std::make_unique<SerialMonitor>("simulate",6)),
+    serialMonitor(std::make_unique<SerialMonitor>("monitor",6)),
     body(std::make_unique<Body>()),
     transport(std::make_unique<Transport>(40,3.0f/8.0f)),
     sq(std::make_unique<SoftQuantizer>()),
     meta({
-        GraphMeta("accel", "sensor", {"x", "y", "z"}),
         GraphMeta("gyro", "sensor", {"x", "y", "z"}),
-        GraphMeta("transport", "rhythmic", {"phase", "cyclePhase"}),
-        GraphMeta("parameter", "parameter", {"gyro_y","n"})
+        GraphMeta("transport", "rhythmic", {"cyclePhase"}),
+        GraphMeta("cycle ratio", "parameter", {"gyro_y","ratio_cycle"}),
+        GraphMeta("frequency ratio", "parameter", {"gyro_x","ratio_freq"})
     }),
     graphVector(std::make_unique<GraphVector>(meta)),
     ratioDisplay(std::make_unique<RatioDisplay>()),
@@ -89,6 +89,14 @@ AudioTester::AudioTester()
 
     setSize(800, 600);
     setAudioChannels(0, 2); // 0 input channels, 2 output channels
+    
+    serialMonitor->setCallback([this](const std::vector<float> sample) {
+        juce::MessageManager::callAsync([this, sample] {
+            body->processSample(sample);
+        });
+    });
+
+    serialMonitor->start();
 }
 
 AudioTester::~AudioTester() {
@@ -154,21 +162,36 @@ void AudioTester::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
     bufferToFill.clearActiveBufferRegion();
 
     juce::AudioBuffer<float>& buffer = *bufferToFill.buffer;
+
+    const float gyro_y = body->getChild("hand")->getChild("gyro")->getValue("y") / 17000;
+    float ratio_cycle = (gyro_y > .5) ? 3.0f : 4.0f;
+    ratio_cycle /= 8.0f;
+
+    // float ratio_cycle = (transport->getBeatCount() % 2 == 0) ? .5f : 3.0f/8.0f;
+    beatDisplay->updateRatio(ratio_cycle);
+    transport->updateRatio(ratio_cycle);
+
+    const float gyro_x = body->getChild("hand")->getChild("gyro")->getValue("x") / 17000;
+
+    // float ratio_freq = transport->calculateBarPhase();
+    float ratio_freq = sq->quantize(gyro_x);
+    ratio_freq = (15.0f+ratio_freq)/20.0f;
+    ratioDisplay->updateRatio(ratio_freq);
+    oscillator->modulateFrequency(ratio_freq);
     
     auto [beatSampleIndex, phase, cycleBeatSampleIndex, cyclePhase] = transport->processBlock(bufferToFill);
 
     beatDisplay->updatePhase(phase);
     barDisplay->updatePhase(transport->calculateBarPhase());
 
-    float ratio_freq = transport->calculateBarPhase();
-    ratio_freq = sq->quantize(ratio_freq);
-    ratio_freq = (15.0f+ratio_freq)/20.0f;
-    ratioDisplay->updateRatio(ratio_freq);
-    oscillator->modulateFrequency(ratio_freq);
-
-    float ratio_cycle = (transport->getBeatCount() % 2 == 0) ? .5f : 3.0f/8.0f;
-    beatDisplay->updateRatio(ratio_cycle);
-    transport->updateRatio(ratio_cycle);
-
     oscillator->processBlock(buffer,cycleBeatSampleIndex);
+
+    const std::vector<std::vector<float>> sample = {
+        body->getChild("hand")->getChild("gyro")->vectorizeState(),
+        {cyclePhase},
+        {gyro_y,ratio_cycle},
+        {gyro_x,ratio_freq},
+    };
+
+    graphVector->pushSample(sample);
 }

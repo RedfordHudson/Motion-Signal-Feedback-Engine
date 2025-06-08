@@ -1,3 +1,4 @@
-target_link_libraries(AudioTestComponent
+target_link_libraries(AudioTester
     PRIVATE
+        CycloidDisplays
 )

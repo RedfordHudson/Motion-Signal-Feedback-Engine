@@ -1,6 +1,7 @@
 #include "AudioTester.h"
 
 #include <SerialMonitor.h>
+#include <HumanWare.h>
 
 #include <Transport.h>
 #include <OscillatorWrapper.h>
@@ -64,6 +65,7 @@ private:
 AudioTester::AudioTester()
     :
     serialMonitor(std::make_unique<SerialMonitor>("simulate",6)),
+    body(std::make_unique<Body>()),
     transport(std::make_unique<Transport>(40,3.0f/8.0f)),
     sq(std::make_unique<SoftQuantizer>()),
     meta({
@@ -78,6 +80,9 @@ AudioTester::AudioTester()
     beatDisplay(std::make_unique<BeatDisplay>(3.0f/8.0f,true)),
     oscillator(std::make_unique<OscillatorWrapper>(440.f))
 {
+
+    addAndMakeVisible(*graphVector);
+
     addAndMakeVisible(*ratioDisplay);
     addAndMakeVisible(*barDisplay);
     addAndMakeVisible(*beatDisplay);
@@ -102,15 +107,38 @@ void AudioTester::paint(juce::Graphics& g)
 }
 
 void AudioTester::resized() {
-    juce::FlexBox flexbox;
-    flexbox.flexDirection = juce::FlexBox::Direction::column;
+    // juce::FlexBox flexbox;
+    // flexbox.flexDirection = juce::FlexBox::Direction::column;
 
-    for (auto* child : getChildren()) {
-        flexbox.items.add(juce::FlexItem(*child).withFlex(1.0f));
-    }
+    // for (auto* child : getChildren()) {
+    //     flexbox.items.add(juce::FlexItem(*child).withFlex(1.0f));
+    // }
 
-    flexbox.performLayout(getLocalBounds());
+    // flexbox.performLayout(getLocalBounds());
+
+    auto bounds = getLocalBounds();
+
+    // Split the main bounds into two columns
+    auto leftColumn = bounds.removeFromLeft(bounds.getWidth() / 2);
+    auto rightColumn = bounds; // Remaining half
+
+    // Layout left column (graphVector fills this area)
+    if (graphVector)
+        graphVector->setBounds(leftColumn);
+
+    // Layout right column vertically stacked
+    int componentHeight = rightColumn.getHeight() / 3;
+
+    if (ratioDisplay)
+        ratioDisplay->setBounds(rightColumn.removeFromTop(componentHeight));
+
+    if (barDisplay)
+        barDisplay->setBounds(rightColumn.removeFromTop(componentHeight));
+
+    if (beatDisplay)
+        beatDisplay->setBounds(rightColumn);
 }
+
 
 
 void AudioTester::prepareToPlay(int samplesPerBlockExpected, double sampleRate)

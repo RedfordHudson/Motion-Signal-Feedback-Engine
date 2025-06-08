@@ -5,6 +5,7 @@
 #include <juce_dsp/juce_dsp.h>
 
 class SerialMonitor;
+class Body;
 
 class Transport;
 class OscillatorWrapper;
@@ -51,6 +52,7 @@ public:
 private:
 
     std::unique_ptr<SerialMonitor> serialMonitor;
+    std::unique_ptr<Body> body;
     
     std::unique_ptr<Transport> transport;
     std::unique_ptr<OscillatorWrapper> oscillator;

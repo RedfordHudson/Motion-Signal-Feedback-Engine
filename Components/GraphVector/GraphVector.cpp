@@ -6,7 +6,7 @@
 GraphVector::GraphVector(const std::vector<GraphMeta>& meta)
     : size(meta.size())
 {
-    const int width = 800;
+    const int width = 800/2;
     const int height = 600;
 
     for (unsigned int i = 0; i < size; i++) {

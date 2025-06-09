@@ -19,6 +19,8 @@ Grapher::Grapher(
     legendComponents(0)
 {
     setSize(width, height);
+
+    generateNameLabel();
     
     // generate legend
     for (unsigned int i = 0; i < size; i++) {
@@ -54,6 +56,26 @@ void Grapher::resized()
 }
 
 // == [ label ] ==
+
+void Grapher::generateNameLabel() {    
+    nameLabel = std::make_unique<juce::Label>();
+    nameLabel->setText(name, juce::dontSendNotification);
+    nameLabel->setColour(juce::Label::textColourId, juce::Colours::white);
+    nameLabel->setColour(juce::Label::backgroundColourId, juce::Colours::black);
+
+    nameLabel->setColour(juce::Label::outlineColourId, getBorderColor());
+    nameLabel->setJustificationType(juce::Justification::centred);
+
+    // Calculate width based on text size
+    int width = juce::Font(14.0f).getStringWidth(name);
+    // Add padding for the border and some extra space
+    width += 20;
+
+    // Position the label dynamically (stacking them below each other, e.g.)
+    nameLabel->setBounds( (getWidth() - width)/2, getHeight() - 20, width, 20);
+
+    addAndMakeVisible(*nameLabel);
+}
 
 void Grapher::generateLegend(const int fieldIndex, const juce::Colour& color) {
     const std::string& field = fields[fieldIndex];

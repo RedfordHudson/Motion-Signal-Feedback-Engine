@@ -5,8 +5,8 @@
 
 class DynamicCycloid : public Cycloid {
 public:
-    DynamicCycloid(const std::string& type, const float ratio, const bool master = true)
-        : Cycloid(type,ratio), master(master)
+    DynamicCycloid(const std::string& name, const std::string& type, const float ratio, const bool master = true)
+        : Cycloid(name,type,ratio), master(master)
     {}
 
     void paint(juce::Graphics& g) override {

@@ -64,20 +64,20 @@ private:
 
 AudioTester::AudioTester()
     :
-    serialMonitor(std::make_unique<SerialMonitor>("monitor",6)),
+    serialMonitor(std::make_unique<SerialMonitor>("simulate",6)),
     body(std::make_unique<Body>()),
     transport(std::make_unique<Transport>(40,3.0f/8.0f)),
     sq(std::make_unique<SoftQuantizer>()),
     meta({
-        GraphMeta("gyro", "sensor", {"x", "y", "z"}),
-        GraphMeta("transport", "rhythmic", {"cyclePhase"}),
-        GraphMeta("cycle ratio", "parameter", {"gyro_y","ratio_cycle"}),
-        GraphMeta("frequency ratio", "parameter", {"gyro_x","ratio_freq"})
+        GraphMeta("Gyroscope", "sensor", {"x", "y", "z"}),
+        GraphMeta("Transport", "rhythmic", {"cyclePhase"}),
+        GraphMeta("Beat Pattern", "parameter", {"gyro_y","ratio_cycle"}),
+        GraphMeta("Frequency Ratio", "parameter", {"gyro_x","ratio_freq"})
     }),
     graphVector(std::make_unique<GraphVector>(meta)),
-    ratioDisplay(std::make_unique<RatioDisplay>()),
-    barDisplay(std::make_unique<BarDisplay>(true)),
-    beatDisplay(std::make_unique<BeatDisplay>(3.0f/8.0f,true)),
+    ratioDisplay(std::make_unique<RatioDisplay>("Frequency Ratio")),
+    barDisplay(std::make_unique<BarDisplay>("Bar",true)),
+    beatDisplay(std::make_unique<BeatDisplay>("Beat",3.0f/8.0f,true)),
     oscillator(std::make_unique<OscillatorWrapper>(440.f))
 {
 

@@ -2,8 +2,8 @@
 
 class StaticCycloid : public Cycloid {
 public:
-    StaticCycloid(const std::string& type, const float ratio)
-        : Cycloid(type,ratio)
+    StaticCycloid(const std::string& name, const std::string& type, const float ratio)
+        : Cycloid(name,type,ratio)
     {}
 
     void paint(juce::Graphics& g) override {

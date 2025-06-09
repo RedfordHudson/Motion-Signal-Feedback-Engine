@@ -2,7 +2,7 @@
 
 class RatioDisplay : public StaticCycloid {
 public:
-    RatioDisplay()
-        : StaticCycloid("epi",1.0f/3.0f)
+    RatioDisplay(const std::string& name)
+        : StaticCycloid(name,"epi",1.0f/3.0f)
     {}
 };
